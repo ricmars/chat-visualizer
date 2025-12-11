@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ChatMessage",
+  "description": "Schema for AI Chat Messages with adaptive UI rendering",
+  "type": "object",
+  "required": ["type", "version", "parts"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "ui_message"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "default": "1.0.0"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["user", "assistant", "system"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "parts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["type", "id", "content"],
+            "properties": {
+              "type": { "const": "text" },
+              "id": { "type": "string" },
+              "content": { "type": "string" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "id", "content"],
+            "properties": {
+              "type": { "const": "code" },
+              "id": { "type": "string" },
+              "language": {
+                "type": "string",
+                "enum": ["python", "javascript", "typescript", "sql", "json", "html", "css", "bash"]
+              },
+              "content": { "type": "string" }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

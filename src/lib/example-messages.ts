@@ -1,6 +1,9 @@
-import type { ChatMessage } from "./types"
+import type { Conversation } from "./types"
 
-export const exampleMessages: ChatMessage[] = [
+export const exampleConversation: Conversation = {
+  id: "example-conversation-1",
+  title: "Data Analysis Example",
+  messages: [
   {
     type: "ui_message",
     version: "1.0.0",
@@ -167,4 +170,5 @@ Based on the data analysis:
       },
     ],
   },
-]
+  ],
+}

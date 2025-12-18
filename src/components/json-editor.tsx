@@ -1,8 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, CheckCircle2 } from "lucide-react"
+import Ajv from "ajv"
+import addFormats from "ajv-formats"
 
 interface JsonEditorProps {
   value: string
@@ -14,36 +16,66 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
   const [errors, setErrors] = useState<string[]>([])
   const [isValid, setIsValid] = useState(true)
 
-  useEffect(() => {
-    validateJson(value)
-  }, [value])
+  // Create and compile the validator once when schema changes
+  const validator = useMemo(() => {
+    if (!schema) return null
+    
+    const ajv = new Ajv({ allErrors: true, verbose: true })
+    addFormats(ajv)
+    return ajv.compile(schema)
+  }, [schema])
 
-  const validateJson = (jsonString: string) => {
+  useEffect(() => {
     const newErrors: string[] = []
 
     // Check if valid JSON
+    let parsed: any
     try {
-      const parsed = JSON.parse(jsonString)
-
-      // Basic schema validation
-      if (schema) {
-        if (parsed.type !== "ui_message") {
-          newErrors.push('Message type must be "ui_message"')
-        }
-        if (!parsed.version) {
-          newErrors.push("Version is required")
-        }
-        if (!parsed.parts || !Array.isArray(parsed.parts)) {
-          newErrors.push("Parts array is required")
-        }
-      }
+      parsed = JSON.parse(value)
     } catch (e) {
       newErrors.push(`Invalid JSON: ${(e as Error).message}`)
+      setErrors(newErrors)
+      setIsValid(false)
+      return
+    }
+
+    // Validate against schema using ajv
+    if (validator) {
+      const valid = validator(parsed)
+      if (!valid && validator.errors) {
+        // Format ajv errors into user-friendly messages
+        validator.errors.forEach((error) => {
+          const path = error.instancePath || error.schemaPath || ""
+          const message = error.message || "Validation error"
+          
+          // Format the error message
+          let errorMessage = message
+          if (path) {
+            // Remove leading slash and format path
+            const cleanPath = path.replace(/^\//, "").replace(/\//g, ".")
+            if (cleanPath) {
+              errorMessage = `${cleanPath}: ${message}`
+            }
+          }
+          
+          // Add additional context for certain error types
+          if (error.keyword === "required") {
+            const missingProperty = error.params?.missingProperty
+            if (missingProperty) {
+              errorMessage = `${path || "root"}: Missing required property "${missingProperty}"`
+            }
+          } else if (error.keyword === "const") {
+            errorMessage = `${path || "root"}: Must be "${error.params?.allowedValue}"`
+          }
+          
+          newErrors.push(errorMessage)
+        })
+      }
     }
 
     setErrors(newErrors)
     setIsValid(newErrors.length === 0)
-  }
+  }, [value, validator])
 
   return (
     <div className="flex h-full flex-col">

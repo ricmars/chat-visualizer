@@ -3,33 +3,33 @@
 import { useState, useEffect } from "react"
 import { JsonEditor } from "@/components/json-editor"
 import { ChatRenderer } from "@/components/chat-renderer"
-import { exampleMessages } from "@/lib/example-messages"
-import { chatMessageSchema } from "@/lib/schema-generator"
-import type { ChatMessage } from "@/lib/types"
+import { exampleConversation } from "@/lib/example-messages"
+import conversationSchema from "@/lib/schemas/chat-message.schema.json"
+import type { Conversation } from "@/lib/types"
 import { MessageSquare, Code2 } from "lucide-react"
 
 export default function Home() {
   const [jsonValue, setJsonValue] = useState("")
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [conversation, setConversation] = useState<Conversation | null>(null)
 
   useEffect(() => {
-    // Initialize with example messages
-    const initialJson = JSON.stringify(exampleMessages, null, 2)
+    // Initialize with example conversation
+    const initialJson = JSON.stringify(exampleConversation, null, 2)
     setJsonValue(initialJson)
-    setMessages(exampleMessages)
+    setConversation(exampleConversation)
   }, [])
 
   const handleJsonChange = (value: string) => {
     setJsonValue(value)
 
-    // Try to parse and update messages
+    // Try to parse and update conversation
     try {
       const parsed = JSON.parse(value)
-      // Support both single message and array of messages
-      const messageArray = Array.isArray(parsed) ? parsed : [parsed]
-      setMessages(messageArray)
+      if (parsed && typeof parsed === "object" && parsed.messages) {
+        setConversation(parsed)
+      }
     } catch {
-      // Invalid JSON, keep previous messages
+      // Invalid JSON, keep previous conversation
     }
   }
 
@@ -54,12 +54,12 @@ export default function Home() {
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel - JSON Editor */}
         <div className="w-1/2 border-r border-border">
-          <JsonEditor value={jsonValue} onChange={handleJsonChange} schema={chatMessageSchema} />
+          <JsonEditor value={jsonValue} onChange={handleJsonChange} schema={conversationSchema} />
         </div>
 
         {/* Right Panel - Chat Preview */}
         <div className="w-1/2">
-          <ChatRenderer messages={messages} />
+          <ChatRenderer messages={conversation?.messages || []} />
         </div>
       </div>
 
@@ -69,7 +69,7 @@ export default function Home() {
           <span>Schema Version: 1.0.0</span>
           <span className="flex items-center gap-2">
             <Code2 className="h-3.5 w-3.5" />
-            {messages.length} message{messages.length !== 1 ? "s" : ""} loaded
+            {conversation?.messages.length || 0} message{(conversation?.messages.length || 0) !== 1 ? "s" : ""} loaded
           </span>
         </div>
       </footer>

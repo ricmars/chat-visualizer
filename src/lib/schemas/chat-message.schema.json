@@ -1,0 +1,443 @@
+{
+  "$ref": "#/definitions/Conversation",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Action": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "output": {
+          "additionalProperties": false,
+          "properties": {
+            "data": {},
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "data"
+          ],
+          "type": "object"
+        },
+        "payload": {
+          "type": "object"
+        },
+        "status": {
+          "$ref": "#/definitions/ActionStatus"
+        },
+        "title": {
+          "type": "string"
+        },
+        "verb": {
+          "$ref": "#/definitions/ActionVerb"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "verb",
+        "payload"
+      ],
+      "type": "object"
+    },
+    "ActionStatus": {
+      "enum": [
+        "idle",
+        "running",
+        "success",
+        "failed"
+      ],
+      "type": "string"
+    },
+    "ActionVerb": {
+      "enum": [
+        "openUrl",
+        "submitForm",
+        "rerunQuery",
+        "runAutomation",
+        "copyToClipboard",
+        "downloadFile"
+      ],
+      "type": "string"
+    },
+    "ChatMessage": {
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "items": {
+            "$ref": "#/definitions/Action"
+          },
+          "type": "array"
+        },
+        "parts": {
+          "items": {
+            "$ref": "#/definitions/MessagePart"
+          },
+          "type": "array"
+        },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "type": {
+          "const": "ui_message",
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "version",
+        "parts"
+      ],
+      "type": "object"
+    },
+    "CodeExecutionStatus": {
+      "enum": [
+        "queued",
+        "running",
+        "success",
+        "error",
+        "idle"
+      ],
+      "type": "string"
+    },
+    "CodeLanguage": {
+      "enum": [
+        "python",
+        "javascript",
+        "typescript",
+        "sql",
+        "json",
+        "html",
+        "css",
+        "bash"
+      ],
+      "type": "string"
+    },
+    "CodeOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "console_log",
+            "error",
+            "result"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "data"
+      ],
+      "type": "object"
+    },
+    "CodePart": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "language": {
+          "$ref": "#/definitions/CodeLanguage"
+        },
+        "output": {
+          "$ref": "#/definitions/CodeOutput"
+        },
+        "status": {
+          "$ref": "#/definitions/CodeExecutionStatus"
+        },
+        "type": {
+          "const": "code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "language",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Conversation": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "messages": {
+          "items": {
+            "$ref": "#/definitions/ChatMessage"
+          },
+          "type": "array"
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "messages"
+      ],
+      "type": "object"
+    },
+    "ImagePart": {
+      "additionalProperties": false,
+      "properties": {
+        "altText": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "image",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "altText",
+        "id",
+        "type",
+        "url"
+      ],
+      "type": "object"
+    },
+    "InsightPart": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "metrics": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "number"
+                    ]
+                  }
+                },
+                "required": [
+                  "label",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "severity": {
+              "enum": [
+                "info",
+                "warning",
+                "error",
+                "success"
+              ],
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "description"
+          ],
+          "type": "object"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "insight",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "MarkdownPart": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "markdown",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "MessagePart": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TextPart"
+        },
+        {
+          "$ref": "#/definitions/MarkdownPart"
+        },
+        {
+          "$ref": "#/definitions/RichTextPart"
+        },
+        {
+          "$ref": "#/definitions/CodePart"
+        },
+        {
+          "$ref": "#/definitions/ImagePart"
+        },
+        {
+          "$ref": "#/definitions/ViewPart"
+        },
+        {
+          "$ref": "#/definitions/InsightPart"
+        }
+      ]
+    },
+    "MessageRole": {
+      "enum": [
+        "user",
+        "assistant",
+        "system"
+      ],
+      "type": "string"
+    },
+    "RichTextPart": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "richText",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "TextPart": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ViewPart": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "additionalProperties": false,
+          "properties": {
+            "config": {
+              "type": "object"
+            },
+            "data": {},
+            "viewType": {
+              "enum": [
+                "table",
+                "chart",
+                "list",
+                "grid",
+                "custom"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "viewType",
+            "data"
+          ],
+          "type": "object"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "view",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "type"
+      ],
+      "type": "object"
+    }
+  }
+}

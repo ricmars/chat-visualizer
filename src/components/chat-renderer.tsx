@@ -15,7 +15,7 @@ interface ChatRendererProps {
 
 export function ChatRenderer({ messages }: ChatRendererProps) {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col" style={{ background: "#EAECF6" }}>
       <div className="border-b border-border bg-muted/30 px-4 py-2">
         <h2 className="text-sm font-semibold">Chat Preview</h2>
       </div>
@@ -46,12 +46,26 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 }
 
 function PartRenderer({ part, isUser }: { part: MessagePart; isUser: boolean }) {
-  const baseClasses = cn("rounded-lg", isUser ? "bg-primary text-primary-foreground" : "bg-muted")
+  const baseClasses = cn("rounded-lg", !isUser && "bg-muted")
+  
+  const userMessageStyle: React.CSSProperties = isUser ? {
+    display: "flex",
+    padding: "6px 14px",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: "10px",
+    borderRadius: "20px 5px 20px 20px",
+    background: "#3F57E4",
+    color: "white"
+  } : {}
 
   switch (part.type) {
     case "text":
       return (
-        <div className={cn(baseClasses, "px-4 py-2.5")}>
+        <div 
+          className={cn(baseClasses, !isUser && "px-4 py-2.5")}
+          style={userMessageStyle}
+        >
           <p className="text-sm leading-relaxed">{part.content}</p>
         </div>
       )
@@ -64,7 +78,13 @@ function PartRenderer({ part, isUser }: { part: MessagePart; isUser: boolean }) 
       )
 
     case "richText":
-      return <div className={cn(baseClasses, "px-4 py-2.5")} dangerouslySetInnerHTML={{ __html: part.content }} />
+      return (
+        <div 
+          className={cn(baseClasses, !isUser && "px-4 py-2.5")}
+          style={userMessageStyle}
+          dangerouslySetInnerHTML={{ __html: part.content }} 
+        />
+      )
 
     case "code":
       return <CodeBlock part={part} />

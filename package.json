@@ -12,6 +12,8 @@
     "gen-schema": "./node_modules/.bin/ts-json-schema-generator --no-type-check --type 'Conversation' --path 'src/lib/types.ts' -o 'src/lib/schemas/chat-message.schema.json'"
   },
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.2",
+    "@codemirror/theme-one-dark": "^6.1.3",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "1.2.12",
     "@radix-ui/react-alert-dialog": "1.1.15",
@@ -40,6 +42,7 @@
     "@radix-ui/react-toggle": "1.1.10",
     "@radix-ui/react-toggle-group": "1.1.11",
     "@radix-ui/react-tooltip": "1.2.8",
+    "@uiw/react-codemirror": "^4.25.4",
     "@vercel/analytics": "1.6.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
@@ -51,14 +54,14 @@
     "embla-carousel-react": "8.6.0",
     "input-otp": "1.4.2",
     "lucide-react": "^0.562.0",
-    "next": "16.0.10",
+    "next": "16.1.0",
     "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-day-picker": "9.13.0",
     "react-dom": "19.2.3",
-    "react-hook-form": "^7.68.0",
+    "react-hook-form": "^7.69.0",
     "react-markdown": "latest",
-    "react-resizable-panels": "^4.0.7",
+    "react-resizable-panels": "^4.0.14",
     "recharts": "3.6.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
@@ -67,7 +70,7 @@
     "zod": "4.2.1"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^16.0.10",
+    "@next/eslint-plugin-next": "^16.1.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25",
     "@types/react": "^19",

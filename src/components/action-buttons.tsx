@@ -43,6 +43,18 @@ export function ActionButtons({ actions }: ActionButtonsProps) {
               status === "success" && "border-emerald-600 text-emerald-600",
               status === "failed" && "border-destructive text-destructive",
             )}
+            style={{
+              display: "flex",
+              height: "32px",
+              padding: "0 16px",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              borderRadius: "20px 5px 20px 20px",
+              border: "1px solid #3F57E4",
+              background: "#FFF",
+              color: "#3F57E4",
+            }}
           >
             {status === "running" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {status === "success" && <CheckCircle2 className="h-3.5 w-3.5" />}

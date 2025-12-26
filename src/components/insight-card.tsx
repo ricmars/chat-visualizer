@@ -1,50 +1,120 @@
-"use client"
 
 import type { InsightPart } from "@/lib/types"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import styled from "styled-components"
 import { AlertCircle, AlertTriangle, CheckCircle2, Info } from "lucide-react"
-import { cn } from "@/lib/utils"
 
 interface InsightCardProps {
   part: InsightPart
 }
+
+const Card = styled.div<{ bg?: string }>`
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: ${props => props.bg || '#fff'};
+`
+
+const CardHeader = styled.div`
+  padding-bottom: 12px;
+  padding: 16px;
+`
+
+const HeaderContent = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+`
+
+const HeaderText = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`
+
+const CardTitle = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+`
+
+const CardDescription = styled.p`
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+`
+
+const CardContent = styled.div`
+  padding: 16px;
+  padding-top: 0;
+`
+
+const MetricsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+`
+
+const MetricItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`
+
+const MetricLabel = styled.p`
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+`
+
+const MetricValue = styled.p`
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+`
+
+const IconWrapper = styled.div<{ color?: string }>`
+  margin-top: 2px;
+  color: ${props => props.color || '#374151'};
+`
 
 export function InsightCard({ part }: InsightCardProps) {
   const { content } = part
   const severity = content.severity || "info"
 
   const severityConfig = {
-    info: { icon: Info, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-950/20" },
-    warning: { icon: AlertTriangle, color: "text-yellow-600", bg: "bg-yellow-50 dark:bg-yellow-950/20" },
-    error: { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/5" },
-    success: { icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-950/20" },
+    info: { icon: Info, color: "#2563eb", bg: "#eff6ff" },
+    warning: { icon: AlertTriangle, color: "#d97706", bg: "#fffbeb" },
+    error: { icon: AlertCircle, color: "#ef4444", bg: "#fef2f2" },
+    success: { icon: CheckCircle2, color: "#10b981", bg: "#f0fdf4" },
   }
 
   const config = severityConfig[severity]
   const Icon = config.icon
 
   return (
-    <Card className={cn("border-2", config.bg)}>
-      <CardHeader className="pb-3">
-        <div className="flex items-start gap-3">
-          <Icon className={cn("h-5 w-5 mt-0.5", config.color)} />
-          <div className="flex-1 space-y-1">
-            <CardTitle className="text-base">{content.title}</CardTitle>
-            <CardDescription className="text-sm">{content.description}</CardDescription>
-          </div>
-        </div>
+    <Card bg={config.bg}>
+      <CardHeader>
+        <HeaderContent>
+          <IconWrapper color={config.color}>
+            <Icon size={20} />
+          </IconWrapper>
+          <HeaderText>
+            <CardTitle>{content.title}</CardTitle>
+            <CardDescription>{content.description}</CardDescription>
+          </HeaderText>
+        </HeaderContent>
       </CardHeader>
 
       {content.metrics && content.metrics.length > 0 && (
         <CardContent>
-          <div className="grid grid-cols-3 gap-4">
+          <MetricsGrid>
             {content.metrics.map((metric, idx) => (
-              <div key={idx} className="space-y-1">
-                <p className="text-xs text-muted-foreground">{metric.label}</p>
-                <p className="text-lg font-semibold">{metric.value}</p>
-              </div>
+              <MetricItem key={idx}>
+                <MetricLabel>{metric.label}</MetricLabel>
+                <MetricValue>{metric.value}</MetricValue>
+              </MetricItem>
             ))}
-          </div>
+          </MetricsGrid>
         </CardContent>
       )}
     </Card>

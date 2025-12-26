@@ -1,12 +1,59 @@
-"use client"
 
 import type { ViewPart as ViewPartType } from "@/lib/types"
-import { Card } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import styled from "styled-components"
 
 interface ViewPartProps {
   part: ViewPartType
 }
+
+const Card = styled.div`
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+`
+
+const Pre = styled.pre`
+  font-size: 12px;
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+`
+
+const TableContainer = styled(Card)`
+  padding: 0;
+  overflow: hidden;
+`
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`
+
+const TableHeader = styled.thead`
+  background: rgba(0, 0, 0, 0.02);
+`
+
+const TableRow = styled.tr`
+  border-bottom: 1px solid #e5e7eb;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`
+
+const TableHead = styled.th`
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+`
+
+const TableBody = styled.tbody``
+
+const TableCell = styled.td`
+  padding: 12px;
+  font-size: 14px;
+`
 
 export function ViewPart({ part }: ViewPartProps) {
   const { content } = part
@@ -16,8 +63,8 @@ export function ViewPart({ part }: ViewPartProps) {
   }
 
   return (
-    <Card className="p-4">
-      <pre className="text-xs">{JSON.stringify(content, null, 2)}</pre>
+    <Card>
+      <Pre>{JSON.stringify(content, null, 2)}</Pre>
     </Card>
   )
 }
@@ -28,12 +75,12 @@ function TableView({ data, config }: { data: any[]; config?: any }) {
   const columns = config?.columns || Object.keys(data[0])
 
   return (
-    <Card>
+    <TableContainer>
       <Table>
         <TableHeader>
           <TableRow>
             {columns.map((col: string) => (
-              <TableHead key={col} className="font-semibold">
+              <TableHead key={col}>
                 {col.charAt(0).toUpperCase() + col.slice(1)}
               </TableHead>
             ))}
@@ -43,7 +90,7 @@ function TableView({ data, config }: { data: any[]; config?: any }) {
           {data.map((row, idx) => (
             <TableRow key={idx}>
               {columns.map((col: string) => (
-                <TableCell key={col} className="text-sm">
+                <TableCell key={col}>
                   {row[col]}
                 </TableCell>
               ))}
@@ -51,6 +98,6 @@ function TableView({ data, config }: { data: any[]; config?: any }) {
           ))}
         </TableBody>
       </Table>
-    </Card>
+    </TableContainer>
   )
 }

@@ -1,6 +1,5 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import nextPlugin from "@next/eslint-plugin-next";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
@@ -9,8 +8,6 @@ import reactPlugin from "eslint-plugin-react";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default [
-  // Include Next.js recommended rules so Next can detect the plugin
-  nextPlugin.configs["core-web-vitals"],
   {
     files: ["src/**/*.ts", "src/**/*.tsx"],
     ignores: [

@@ -1,14 +1,52 @@
-"use client"
 
 import { useState } from "react"
+import styled from "styled-components"
 import type { Action } from "@/lib/types"
-import { Button } from "@/components/ui/button"
 import { Loader2, CheckCircle2, XCircle } from "lucide-react"
-import { cn } from "@/lib/utils"
 
 interface ActionButtonsProps {
   actions: Action[]
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`
+
+const ActionButton = styled.button<{ status?: string }>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 20px 5px 20px 20px;
+  border: 1px solid #3F57E4;
+  background: #FFF;
+  color: #3F57E4;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  ${props => props.status === "success" && `
+    border-color: #10b981;
+    color: #10b981;
+  `}
+
+  ${props => props.status === "failed" && `
+    border-color: #ef4444;
+    color: #ef4444;
+  `}
+`
 
 export function ActionButtons({ actions }: ActionButtonsProps) {
   const [actionStates, setActionStates] = useState<Record<string, string>>(
@@ -27,42 +65,24 @@ export function ActionButtons({ actions }: ActionButtonsProps) {
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <Container>
       {actions.map((action) => {
         const status = actionStates[action.id]
 
         return (
-          <Button
+          <ActionButton
             key={action.id}
-            variant="outline"
-            size="sm"
+            status={status}
             onClick={() => handleAction(action)}
             disabled={status === "running"}
-            className={cn(
-              "gap-2",
-              status === "success" && "border-emerald-600 text-emerald-600",
-              status === "failed" && "border-destructive text-destructive",
-            )}
-            style={{
-              display: "flex",
-              height: "32px",
-              padding: "0 16px",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "10px",
-              borderRadius: "20px 5px 20px 20px",
-              border: "1px solid #3F57E4",
-              background: "#FFF",
-              color: "#3F57E4",
-            }}
           >
-            {status === "running" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-            {status === "success" && <CheckCircle2 className="h-3.5 w-3.5" />}
-            {status === "failed" && <XCircle className="h-3.5 w-3.5" />}
+            {status === "running" && <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />}
+            {status === "success" && <CheckCircle2 size={14} />}
+            {status === "failed" && <XCircle size={14} />}
             {action.title}
-          </Button>
+          </ActionButton>
         )
       })}
-    </div>
+    </Container>
   )
 }

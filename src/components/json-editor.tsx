@@ -1,9 +1,6 @@
-"use client"
 
 import { useEffect, useState, useMemo } from "react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import styled from "styled-components"
 import { AlertCircle, CheckCircle2, Code2, Eye, Edit2, ChevronRight, ChevronDown } from "lucide-react"
 import Ajv from "ajv"
 import addFormats from "ajv-formats"
@@ -22,6 +19,207 @@ interface JsonEditorProps {
 }
 
 type ViewMode = "edit" | "view"
+
+const EditorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`
+
+const EditorHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+  background: rgba(0, 0, 0, 0.02);
+  padding: 8px 16px;
+`
+
+const EditorTitle = styled.h2`
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+`
+
+const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`
+
+const Button = styled.button<{ active?: boolean; variant?: 'default' | 'outline' }>`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid ${props => props.variant === 'outline' ? '#e5e7eb' : 'transparent'};
+  background: ${props => props.active ? '#3F57E4' : props.variant === 'outline' ? '#fff' : 'transparent'};
+  color: ${props => props.active ? '#fff' : '#374151'};
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: ${props => props.active ? '#3F57E4' : 'rgba(0, 0, 0, 0.05)'};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`
+
+const StatusContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+`
+
+const StatusValid = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #10b981;
+`
+
+const StatusError = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ef4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`
+
+const Popover = styled.div`
+  position: relative;
+`
+
+const PopoverContent = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  width: 384px;
+  max-height: 384px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  z-index: 50;
+`
+
+const Alert = styled.div<{ variant?: 'destructive' }>`
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: ${props => props.variant === 'destructive' ? '#fef2f2' : 'transparent'};
+  border-radius: 4px;
+  margin-bottom: 8px;
+`
+
+const AlertDescription = styled.div`
+  font-size: 12px;
+  color: ${props => props.color || '#374151'};
+`
+
+const EditorArea = styled.div`
+  flex: 1;
+  overflow: auto;
+`
+
+const TreeViewContainer = styled.div`
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 14px;
+`
+
+const TreeViewEmpty = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+`
+
+const JsonValue = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const JsonToggle = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  margin-left: -4px;
+  border-radius: 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+`
+
+const JsonExpanded = styled.div`
+  margin-left: 16px;
+  margin-top: 4px;
+  padding-left: 8px;
+  border-left: 1px solid #e5e7eb;
+`
+
+const JsonItem = styled.div`
+  display: flex;
+  gap: 8px;
+  padding: 2px 0;
+`
+
+const JsonKey = styled.span`
+  color: #374151;
+  font-weight: 500;
+`
+
+const JsonString = styled.span`
+  color: #059669;
+`
+
+const JsonNumber = styled.span`
+  color: #2563eb;
+`
+
+const JsonBoolean = styled.span`
+  color: #9333ea;
+`
+
+const JsonMuted = styled.span`
+  color: #6b7280;
+`
+
+const JsonIndex = styled.span`
+  color: #6b7280;
+`
 
 // Helper function to resolve $ref references in schema
 function resolveSchemaRef(ref: string, rootSchema: any): any {
@@ -159,6 +357,7 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
   const [isValid, setIsValid] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>("edit")
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(["root"]))
+  const [showErrors, setShowErrors] = useState(false)
 
   // Create and compile the validator once when schema changes
   const validator = useMemo(() => {
@@ -303,8 +502,8 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
           minHeight: "100%",
         },
         ".cm-gutters": {
-          backgroundColor: "hsl(var(--muted) / 0.3)",
-          borderRight: "1px solid hsl(var(--border))",
+          backgroundColor: "rgba(0, 0, 0, 0.03)",
+          borderRight: "1px solid #e5e7eb",
         },
         ".cm-lineNumbers": {
           minWidth: "3ch",
@@ -313,7 +512,7 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
           width: "1.5rem",
         },
         ".cm-foldPlaceholder": {
-          color: "hsl(var(--muted-foreground))",
+          color: "#6b7280",
         },
       }),
     ],
@@ -322,7 +521,7 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
 
   const renderJsonValue = (val: any, path: string, _key: string | number): React.ReactNode => {
     if (val === null) {
-      return <span className="text-muted-foreground">null</span>
+      return <JsonMuted>null</JsonMuted>
     }
 
     const type = Array.isArray(val) ? "array" : typeof val as "object" | "string" | "number" | "boolean"
@@ -333,58 +532,55 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
 
       if (isEmpty) {
         return (
-          <span className="text-muted-foreground">
+          <JsonMuted>
             {type === "array" ? "[]" : "{}"}
-          </span>
+          </JsonMuted>
         )
       }
 
       return (
-        <div className="flex flex-col">
-          <button
-            onClick={() => togglePath(path)}
-            className="flex items-center gap-1 hover:bg-accent/50 rounded px-1 -ml-1 text-left"
-          >
+        <JsonValue>
+          <JsonToggle onClick={() => togglePath(path)}>
             {isExpanded ? (
-              <ChevronDown className="h-3 w-3 text-muted-foreground" />
+              <ChevronDown size={12} color="#6b7280" />
             ) : (
-              <ChevronRight className="h-3 w-3 text-muted-foreground" />
+              <ChevronRight size={12} color="#6b7280" />
             )}
-            <span className="text-muted-foreground">
+            <JsonMuted>
               {type === "array" ? `[${val.length}]` : `{${Object.keys(val).length}}`}
-            </span>
-          </button>
+            </JsonMuted>
+          </JsonToggle>
           {isExpanded && (
-            <div className="ml-4 mt-1 border-l border-border pl-2">
+            <JsonExpanded>
               {Array.isArray(val) ? (
                 val.map((item, index) => (
-                  <div key={index} className="flex gap-2 py-0.5">
-                    <span className="text-muted-foreground">{index}:</span>
+                  <JsonItem key={index}>
+                    <JsonIndex>{index}:</JsonIndex>
                     {renderJsonValue(item, `${path}.${index}`, index)}
-                  </div>
+                  </JsonItem>
                 ))
               ) : (
                 Object.entries(val).map(([k, v]) => (
-                  <div key={k} className="flex gap-2 py-0.5">
-                    <span className="text-foreground font-medium">"{k}":</span>
+                  <JsonItem key={k}>
+                    <JsonKey>"{k}":</JsonKey>
                     {renderJsonValue(v, `${path}.${k}`, k)}
-                  </div>
+                  </JsonItem>
                 ))
               )}
-            </div>
+            </JsonExpanded>
           )}
-        </div>
+        </JsonValue>
       )
     }
 
     if (type === "string") {
-      return <span className="text-green-600 dark:text-green-400">"{String(val)}"</span>
+      return <JsonString>"{String(val)}"</JsonString>
     }
     if (type === "number") {
-      return <span className="text-blue-600 dark:text-blue-400">{String(val)}</span>
+      return <JsonNumber>{String(val)}</JsonNumber>
     }
     if (type === "boolean") {
-      return <span className="text-purple-600 dark:text-purple-400">{String(val)}</span>
+      return <JsonBoolean>{String(val)}</JsonBoolean>
     }
 
     return <span>{String(val)}</span>
@@ -394,111 +590,96 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
     try {
       const parsed = JSON.parse(value)
       return (
-        <div className="flex-1 overflow-auto p-4 font-mono text-sm">
+        <TreeViewContainer>
           {renderJsonValue(parsed, "root", "root")}
-        </div>
+        </TreeViewContainer>
       )
     } catch {
       return (
-        <div className="flex-1 flex items-center justify-center text-muted-foreground">
+        <TreeViewEmpty>
           Invalid JSON - switch to edit mode to fix
-        </div>
+        </TreeViewEmpty>
       )
     }
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b border-border bg-muted/30 px-4 py-2">
-        <h2 className="text-sm font-semibold">JSON Editor</h2>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
+    <EditorContainer>
+      <EditorHeader>
+        <EditorTitle>JSON Editor</EditorTitle>
+        <HeaderActions>
+          <ButtonGroup>
             <Button
-              variant={viewMode === "edit" ? "default" : "ghost"}
-              size="sm"
+              active={viewMode === "edit"}
               onClick={() => setViewMode("edit")}
-              className="h-7 px-2 text-xs"
             >
-              <Edit2 className="h-3 w-3" />
+              <Edit2 size={12} />
               Edit
             </Button>
             <Button
-              variant={viewMode === "view" ? "default" : "ghost"}
-              size="sm"
+              active={viewMode === "view"}
               onClick={() => setViewMode("view")}
-              className="h-7 px-2 text-xs"
             >
-              <Eye className="h-3 w-3" />
+              <Eye size={12} />
               View
             </Button>
-          </div>
+          </ButtonGroup>
           {viewMode === "edit" && (
             <Button
               variant="outline"
-              size="sm"
               onClick={handlePrettify}
-              className="h-7 px-2 text-xs"
             >
-              <Code2 className="h-3 w-3" />
+              <Code2 size={12} />
               Prettify
             </Button>
           )}
           {viewMode === "view" && (
-            <div className="flex items-center gap-1">
+            <ButtonGroup>
               <Button
                 variant="outline"
-                size="sm"
                 onClick={expandAll}
-                className="h-7 px-2 text-xs"
               >
                 Expand All
               </Button>
               <Button
                 variant="outline"
-                size="sm"
                 onClick={collapseAll}
-                className="h-7 px-2 text-xs"
               >
                 Collapse All
               </Button>
-            </div>
+            </ButtonGroup>
           )}
-          <div className="flex items-center gap-2 text-xs">
+          <StatusContainer>
             {isValid ? (
-              <div className="flex items-center gap-1 text-emerald-600">
-                <CheckCircle2 className="h-3.5 w-3.5" />
+              <StatusValid>
+                <CheckCircle2 size={14} />
                 Valid
-              </div>
+              </StatusValid>
             ) : (
               <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 text-destructive hover:opacity-80 cursor-pointer"
-                  >
-                    <AlertCircle className="h-3.5 w-3.5" />
-                    {errors.length} Error{errors.length !== 1 ? "s" : ""}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-96 max-h-96 overflow-auto" align="end">
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-sm mb-3">Validation Errors</h4>
+                <StatusError onClick={() => setShowErrors(!showErrors)}>
+                  <AlertCircle size={14} />
+                  {errors.length} Error{errors.length !== 1 ? "s" : ""}
+                </StatusError>
+                {showErrors && (
+                  <PopoverContent>
+                    <div style={{ marginBottom: '12px', fontWeight: 600, fontSize: '14px' }}>Validation Errors</div>
                     {errors.map((error, i) => (
-                      <Alert key={i} variant="destructive" className="py-2">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription className="text-xs">{error}</AlertDescription>
+                      <Alert key={i} variant="destructive">
+                        <AlertCircle size={16} color="#ef4444" />
+                        <AlertDescription color="#ef4444">{error}</AlertDescription>
                       </Alert>
                     ))}
-                  </div>
-                </PopoverContent>
+                  </PopoverContent>
+                )}
               </Popover>
             )}
-          </div>
-        </div>
-      </div>
+          </StatusContainer>
+        </HeaderActions>
+      </EditorHeader>
 
       {viewMode === "edit" ? (
-        <div className="flex-1 overflow-auto">
+        <EditorArea>
           <CodeMirror
             value={value}
             onChange={onChange}
@@ -508,10 +689,10 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
             editable={true}
             style={{ height: "100%", minHeight: "100%" }}
           />
-        </div>
+        </EditorArea>
       ) : (
         renderTreeView()
       )}
-    </div>
+    </EditorContainer>
   )
 }

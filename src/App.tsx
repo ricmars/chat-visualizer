@@ -7,6 +7,11 @@ import conversationSchema from "@/lib/schemas/chat-message.schema.json"
 import type { Conversation, ChatMessage } from "@/lib/types"
 import { MessageSquare } from "lucide-react"
 import { Providers } from "@/components/providers"
+import { registerIcon } from "@pega/cosmos-react-core";
+import * as polarisSolidIcon from "@pega/cosmos-react-core/lib/components/Icon/icons/polaris-solid.icon";
+import * as userSolidIcon from "@pega/cosmos-react-core/lib/components/Icon/icons/user-solid.icon";
+
+registerIcon(polarisSolidIcon, userSolidIcon);
 
 const PageContainer = styled.div`
   display: flex;

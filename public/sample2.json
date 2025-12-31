@@ -21,67 +21,8 @@
           "filename": "api-handler.js",
           "content": "async function fetchUserData(userId) {\n  try {\n    const response = await fetch(`/api/users/${userId}`);\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Failed to fetch user:', error);\n    throw error;\n  }\n}",
           "status": "idle"
-        },
-        {
-          "type": "view",
-          "id": "table-view",
-          "role": "assistant",
-          "content": {
-            "viewType": "table",
-            "data": [
-              {
-                "id": 1,
-                "name": "Alice Johnson",
-                "status": "Active",
-                "revenue": 45230
-              },
-              {
-                "id": 2,
-                "name": "Bob Smith",
-                "status": "Active",
-                "revenue": 38920
-              },
-              {
-                "id": 3,
-                "name": "Carol Davis",
-                "status": "Pending",
-                "revenue": 12450
-              }
-            ],
-            "config": {
-              "columns": ["id", "name", "status", "revenue"],
-              "sortable": true
-            }
-          }
-        },
-        {
-          "type": "text",
-          "id": "demo-action-2",
-          "role": "assistant",
-          "content": "Select one of the 2 options",
-          "actions": [
-            {
-              "id": "run-code",
-              "title": "Run Code",
-              "verb": "runAutomation",
-              "payload": {
-                "codeId": "js1"
-              },
-              "status": "idle"
-            },
-            {
-              "id": "open-docs",
-              "title": "View Documentation",
-              "verb": "openUrl",
-              "payload": {
-                "url": "https://docs.example.com/api"
-              },
-              "status": "idle"
-            }
-          ]
         }
       ]
     }
   ]
 }
-

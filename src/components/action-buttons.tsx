@@ -22,7 +22,7 @@ const ActionButton = styled.button<{ status?: string; $isSelected?: boolean }>`
   height: 32px;
   padding: 0 16px;
   border-radius: 20px 5px 20px 20px;
-  border: none;
+  border: 1px solid #3F57E4;
   background: ${props => props.$isSelected ? '#3F57E4' : '#FFF'};
   color: ${props => props.$isSelected ? '#FFF' : '#3F57E4'};
   cursor: pointer;

@@ -121,7 +121,7 @@ export interface Action {
   id: string
   title: string
   verb: ActionVerb
-  payload: Record<string, any>
+  payload?: Record<string, any>
   status?: ActionStatus
   output?: {
     type: string

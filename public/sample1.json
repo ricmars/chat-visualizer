@@ -78,6 +78,43 @@
           "content": "## Analysis Results\n\nBased on the data analysis:\n\n- **Electronics** leads with 45% of total revenue\n- **Clothing** shows steady growth at 12% increase\n- **Home & Garden** remains stable with minor fluctuations\n\n### Recommendations\n\n1. Invest more in Electronics inventory\n2. Run promotional campaigns for Clothing\n3. Monitor Home & Garden trends closely"
         },
         {
+          "type": "view",
+          "id": "table-view",
+          "role": "assistant",
+          "content": {
+            "viewType": "table",
+            "data": [
+              {
+                "id": 1,
+                "name": "Alice Johnson",
+                "status": "Active",
+                "revenue": 45230
+              },
+              {
+                "id": 2,
+                "name": "Bob Smith",
+                "status": "Active",
+                "revenue": 38920
+              },
+              {
+                "id": 3,
+                "name": "Carol Davis",
+                "status": "Pending",
+                "revenue": 12450
+              }
+            ],
+            "config": {
+              "columns": [
+                "id",
+                "name",
+                "status",
+                "revenue"
+              ],
+              "sortable": true
+            }
+          }
+        },
+        {
           "type": "text",
           "id": "demo-action",
           "role": "assistant",

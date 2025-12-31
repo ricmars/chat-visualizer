@@ -116,6 +116,8 @@ function App() {
       const parsed = JSON.parse(value)
       if (parsed && typeof parsed === "object" && parsed.messages) {
         setConversation(parsed)
+        // Reset selected message when conversation changes
+        setSelectedMessage(null)
         // If the JSON doesn't match any sample, clear current sample
         // We can't easily detect this, so we'll only clear if user manually edits
         // The sample will be set when loading from dropdown
@@ -127,6 +129,7 @@ function App() {
 
   const handleSampleLoad = (sampleName: string) => {
     setCurrentSample(sampleName)
+    setSelectedMessage(null) // Reset selected message when switching samples
   }
 
   return (

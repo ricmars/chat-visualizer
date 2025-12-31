@@ -116,9 +116,6 @@ const TextPart = styled(PartBase)<{ $hasActions?: boolean }>`
   ${props => !props.isUser && !props.$hasCase && `
     padding: 10px 16px;
   `}
-  ${props => props.$hasActions && !props.isUser && `
-    border: 1px solid #3F57E4;
-  `}
 `
 
 const TextContent = styled.p`

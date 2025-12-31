@@ -33,6 +33,8 @@ export interface Case {
 export interface BasePart {
   type: string
   id: string
+  role?: MessageRole
+  actions?: Action[]
 }
 
 // Text Part
@@ -131,10 +133,8 @@ export interface Action {
 export interface ChatMessage {
   type: "ui_message"
   version: string
-  role?: MessageRole
   timestamp?: string
   parts: MessagePart[]
-  actions?: Action[]
   // Case metadata - when present, indicates this message is related to a case
   // Multiple messages can reference the same case
   case?: Case

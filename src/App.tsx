@@ -86,26 +86,26 @@ function App() {
   const [jsonValue, setJsonValue] = useState("")
   const [conversation, setConversation] = useState<Conversation | null>(null)
   const [selectedMessage, setSelectedMessage] = useState<ChatMessage | null>(null)
-  const [currentSample, setCurrentSample] = useState<string>("sample1.json")
+  const [currentSample, setCurrentSample] = useState<string>("sample3.json")
 
   useEffect(() => {
-    // Initialize with sample1.json
-    const loadSample1 = async () => {
+    // Initialize with sample3.json
+    const loadSample3 = async () => {
       try {
-        const response = await fetch("/sample1.json")
+        const response = await fetch("/sample3.json")
         if (!response.ok) {
-          throw new Error("Failed to load sample1.json")
+          throw new Error("Failed to load sample3.json")
         }
         const json = await response.json()
         const initialJson = JSON.stringify(json, null, 2)
         setJsonValue(initialJson)
         setConversation(json)
-        setCurrentSample("sample1.json")
+        setCurrentSample("sample3.json")
       } catch (error) {
-        console.error("Error loading sample1.json:", error)
+        console.error("Error loading sample3.json:", error)
       }
     }
-    loadSample1()
+    loadSample3()
   }, [])
 
   const handleJsonChange = (value: string) => {
@@ -161,9 +161,9 @@ function App() {
                 onMessageClick={setSelectedMessage}
               />
             </ChatPanel>
-            {selectedMessage && (
+            {selectedMessage?.case && (
               <DetailPanel>
-                <CaseDetailView />
+                <CaseDetailView case={selectedMessage.case} />
               </DetailPanel>
             )}
           </RightPanel>

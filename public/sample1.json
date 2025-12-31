@@ -5,12 +5,12 @@
     {
       "type": "ui_message",
       "version": "1.0.0",
-      "role": "user",
       "timestamp": "2024-01-01T00:00:00.000Z",
       "parts": [
         {
           "type": "text",
           "id": "user-text-1",
+          "role": "user",
           "content": "Can you help me analyze this data and create a visualization?"
         }
       ]
@@ -18,17 +18,18 @@
     {
       "type": "ui_message",
       "version": "1.0.0",
-      "role": "assistant",
       "timestamp": "2024-01-01T00:00:00.000Z",
       "parts": [
         {
           "type": "text",
           "id": "intro",
+          "role": "assistant",
           "content": "I'll help you analyze the data. Let me start by processing it:"
         },
         {
           "type": "code",
           "id": "py1",
+          "role": "assistant",
           "language": "python",
           "filename": "data_analysis.py",
           "content": "import pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load and process data\ndf = pd.read_csv('sales_data.csv')\nsummary = df.groupby('category').sum()\n\nprint(summary)",
@@ -41,6 +42,7 @@
         {
           "type": "insight",
           "id": "insight-1",
+          "role": "assistant",
           "content": {
             "title": "Sales Performance Summary",
             "description": "Your top performing category increased by 23% compared to last quarter.",
@@ -64,6 +66,7 @@
         {
           "type": "image",
           "id": "chart1",
+          "role": "assistant",
           "url": "/sales-chart-visualization.jpg",
           "altText": "Sales performance chart showing category breakdown",
           "caption": "Quarterly sales by category"
@@ -71,31 +74,37 @@
         {
           "type": "markdown",
           "id": "explanation",
+          "role": "assistant",
           "content": "## Analysis Results\n\nBased on the data analysis:\n\n- **Electronics** leads with 45% of total revenue\n- **Clothing** shows steady growth at 12% increase\n- **Home & Garden** remains stable with minor fluctuations\n\n### Recommendations\n\n1. Invest more in Electronics inventory\n2. Run promotional campaigns for Clothing\n3. Monitor Home & Garden trends closely"
-        }
-      ],
-      "actions": [
-        {
-          "id": "export-data",
-          "title": "Export Report",
-          "verb": "downloadFile",
-          "payload": {
-            "filename": "sales_report.pdf",
-            "url": "/api/export"
-          },
-          "status": "idle"
         },
         {
-          "id": "rerun",
-          "title": "Rerun Analysis",
-          "verb": "rerunQuery",
-          "payload": {
-            "analysisId": "analysis-001"
-          },
-          "status": "idle"
+          "type": "text",
+          "id": "demo-action",
+          "role": "assistant",
+          "content": "Select one of the 2 options",
+          "actions": [
+            {
+              "id": "export-data",
+              "title": "Export Report",
+              "verb": "downloadFile",
+              "payload": {
+                "filename": "sales_report.pdf",
+                "url": "/api/export"
+              },
+              "status": "idle"
+            },
+            {
+              "id": "rerun",
+              "title": "Rerun Analysis",
+              "verb": "rerunQuery",
+              "payload": {
+                "analysisId": "analysis-001"
+              },
+              "status": "idle"
+            }
+          ]
         }
       ]
     }
   ]
 }
-

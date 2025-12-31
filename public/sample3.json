@@ -5,7 +5,19 @@
     {
       "type": "ui_message",
       "version": "1.0.0",
-      "role": "assistant",
+      "timestamp": "2024-01-01T00:00:00.000Z",
+      "parts": [
+        {
+          "type": "text",
+          "id": "user-text-1",
+          "role": "assistant",
+          "content": "Perfect! I have everything I need to build your campaign, would you like to start the workflow?"
+        }
+      ]
+    },
+    {
+      "type": "ui_message",
+      "version": "1.0.0",
       "timestamp": "2024-01-01T00:00:00.000Z",
       "case": {
         "id": "CA-1145",
@@ -44,20 +56,51 @@
       },
       "parts": [
         {
-          "type": "text",
-          "id": "case-intro",
-          "content": "I've created a new campaign case for you. Here are the details:"
+          "type": "case",
+          "id": "case-1",
+          "role": "assistant"
         },
         {
-          "type": "case",
-          "id": "case-1"
+          "type": "markdown",
+          "id": "attributes-details",
+          "role": "assistant",
+          "content": "## Attributes Details\n\nI've gotten as far as defining attributes and pre-filled the following details:\n\n- **Name**: Exclusive Rewards for Loyal Credit Card Users\n- **Description**: Reward loyal customers with exclusive offers on credit cards if they use their card twice a month.\n- **Product & Services**: U+ Bank Gold Credit Card\n- **Outcome**: Retain\n\nI need some additional information:\n\n- **Keycode**: (a unique identifier for tracking the campaign)\n- **Product ID**: (the identifier for this card product) In the past you have used \"A1455\"\n\nOnce we have those details, we can define the availability next."
+        },
+        {
+          "type": "text",
+          "id": "response-1",
+          "role": "user",
+          "content": "Keycode is 1234, Product ID is A1455"
+        },
+        {
+          "type": "text",
+          "id": "response-2",
+          "role": "assistant",
+          "content": "Great! Lets continue onto defining the rest of the campaign...."
+        },
+        {
+          "type": "markdown",
+          "id": "md-2",
+          "role": "assistant",
+          "content": "We found another campaign called \"U+ Bank Credit Card\" has a similar engagement policy that has been approved by Legal and Compliance.\n\nThe differences are:\n\n- Age is greater than 24 instead of 25\n - Customer annual income is greater than or equal to 10,000 instead of 5,000\n\nReusing a pre-approved policy typically reduces build time by 5 days!\n\nWould you like to use the pre-approved policy?",
+          "actions": [
+            {
+              "id": "yes",
+              "title": "Yes, use the approved policy",
+              "verb": "submitForm"
+            },
+            {
+              "id": "rerun",
+              "title": "No, use my own",
+              "verb": "submitForm"
+            }
+          ]
         }
       ]
     },
     {
       "type": "ui_message",
       "version": "1.0.0",
-      "role": "assistant",
       "timestamp": "2024-01-01T00:00:00.000Z",
       "case": {
         "id": "SR-2847",
@@ -98,11 +141,13 @@
         {
           "type": "text",
           "id": "case-intro-2",
+          "role": "assistant",
           "content": "I've created a new support request case for you. Here are the details:"
         },
         {
           "type": "case",
-          "id": "case-2"
+          "id": "case-2",
+          "role": "assistant"
         }
       ]
     }

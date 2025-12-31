@@ -662,7 +662,7 @@ export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoa
       <EditorHeader>
         <EditorTitle>
           JSON Editor
-          <SampleSelect value={currentSample || "sample1.json"} onChange={handleSampleChange}>
+          <SampleSelect value={currentSample || "sample3.json"} onChange={handleSampleChange}>
             <option value="sample1.json">Sample 1 - Data Analysis</option>
             <option value="sample2.json">Sample 2 - JavaScript Example</option>
             <option value="sample3.json">Sample 3 - Case Example</option>

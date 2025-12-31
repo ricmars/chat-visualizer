@@ -99,6 +99,9 @@
         "id": {
           "type": "string"
         },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
+        },
         "type": {
           "const": "case",
           "type": "string"
@@ -146,9 +149,6 @@
             "$ref": "#/definitions/MessagePart"
           },
           "type": "array"
-        },
-        "role": {
-          "$ref": "#/definitions/MessageRole"
         },
         "timestamp": {
           "type": "string"
@@ -230,6 +230,9 @@
         "output": {
           "$ref": "#/definitions/CodeOutput"
         },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
+        },
         "status": {
           "$ref": "#/definitions/CodeExecutionStatus"
         },
@@ -285,6 +288,9 @@
         },
         "id": {
           "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
         },
         "type": {
           "const": "image",
@@ -358,6 +364,9 @@
         "id": {
           "type": "string"
         },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
+        },
         "type": {
           "const": "insight",
           "type": "string"
@@ -378,6 +387,9 @@
         },
         "id": {
           "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
         },
         "type": {
           "const": "markdown",
@@ -436,6 +448,9 @@
         "id": {
           "type": "string"
         },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
+        },
         "type": {
           "const": "richText",
           "type": "string"
@@ -456,6 +471,9 @@
         },
         "id": {
           "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
         },
         "type": {
           "const": "text",
@@ -498,6 +516,9 @@
         },
         "id": {
           "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/MessageRole"
         },
         "type": {
           "const": "view",

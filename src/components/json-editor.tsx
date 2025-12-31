@@ -556,7 +556,7 @@ export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoa
           minHeight: "100%",
         },
         ".cm-gutters": {
-          backgroundColor: "rgba(0, 0, 0, 0.03)",
+          backgroundColor: "#ccc",
           borderRight: "1px solid #e5e7eb",
         },
         ".cm-lineNumbers": {

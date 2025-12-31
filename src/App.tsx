@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import styled from "styled-components"
 import { JsonEditor } from "@/components/json-editor"
 import { ChatRenderer } from "@/components/chat-renderer"
@@ -60,20 +60,27 @@ const MainContent = styled.div`
   overflow: hidden;
 `
 
-const Panel = styled.div`
-  width: 600px;
+const Panel = styled.div<{ width: number }>`
+  width: ${props => props.width}px;
+  min-width: 300px;
+  max-width: 80%;
   border-right: 1px solid #e5e7eb;
+  overflow: hidden;
 `
 
 const RightPanel = styled.div`
   flex: 1;
   display: flex;
   overflow: hidden;
+  min-width: 0;
 `
 
-const ChatPanel = styled.div`
-  width: 650px;
+const ChatPanel = styled.div<{ width: number }>`
+  width: ${props => props.width}px;
+  min-width: 300px;
+  max-width: 80%;
   border-right: 1px solid #e5e7eb;
+  overflow: hidden;
 `
 
 const DetailPanel = styled.div`
@@ -82,11 +89,44 @@ const DetailPanel = styled.div`
   margin: 1rem;
 `
 
+const ResizeHandle = styled.div`
+  width: 4px;
+  background: #e5e7eb;
+  cursor: col-resize;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #3F57E4;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: 0;
+    bottom: 0;
+  }
+`
+
 function App() {
   const [jsonValue, setJsonValue] = useState("")
   const [conversation, setConversation] = useState<Conversation | null>(null)
   const [selectedMessage, setSelectedMessage] = useState<ChatMessage | null>(null)
   const [currentSample, setCurrentSample] = useState<string>("sample3.json")
+  
+  // Panel widths
+  const [leftPanelWidth, setLeftPanelWidth] = useState(600)
+  const [chatPanelWidth, setChatPanelWidth] = useState(650)
+  
+  // Resize state
+  const [isResizingLeft, setIsResizingLeft] = useState(false)
+  const [isResizingRight, setIsResizingRight] = useState(false)
+  const resizeStartX = useRef(0)
+  const resizeStartLeftWidth = useRef(0)
+  const resizeStartChatWidth = useRef(0)
 
   useEffect(() => {
     // Initialize with sample3.json
@@ -132,6 +172,55 @@ function App() {
     setSelectedMessage(null) // Reset selected message when switching samples
   }
 
+  // Left panel resize handlers (between JsonEditor and ChatPanel)
+  const handleLeftResizeStart = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsResizingLeft(true)
+    resizeStartX.current = e.clientX
+    resizeStartLeftWidth.current = leftPanelWidth
+  }, [leftPanelWidth])
+
+  // Right panel resize handlers (between ChatPanel and DetailPanel)
+  const handleRightResizeStart = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsResizingRight(true)
+    resizeStartX.current = e.clientX
+    resizeStartChatWidth.current = chatPanelWidth
+  }, [chatPanelWidth])
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isResizingLeft) {
+        const deltaX = e.clientX - resizeStartX.current
+        const newWidth = Math.max(300, Math.min(window.innerWidth * 0.8, resizeStartLeftWidth.current + deltaX))
+        setLeftPanelWidth(newWidth)
+      } else if (isResizingRight) {
+        const deltaX = e.clientX - resizeStartX.current
+        const newWidth = Math.max(300, Math.min(window.innerWidth * 0.8, resizeStartChatWidth.current + deltaX))
+        setChatPanelWidth(newWidth)
+      }
+    }
+
+    const handleMouseUp = () => {
+      setIsResizingLeft(false)
+      setIsResizingRight(false)
+    }
+
+    if (isResizingLeft || isResizingRight) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = 'col-resize'
+      document.body.style.userSelect = 'none'
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+  }, [isResizingLeft, isResizingRight])
+
   return (
     <Providers>
       <PageContainer>
@@ -148,7 +237,7 @@ function App() {
           </HeaderContent>
         </Header>
         <MainContent>
-          <Panel>
+          <Panel width={leftPanelWidth}>
             <JsonEditor 
               value={jsonValue} 
               onChange={handleJsonChange} 
@@ -157,17 +246,23 @@ function App() {
               onSampleLoad={handleSampleLoad}
             />
           </Panel>
+          <ResizeHandle onMouseDown={handleLeftResizeStart} />
           <RightPanel>
-            <ChatPanel>
+            <ChatPanel width={chatPanelWidth}>
               <ChatRenderer 
                 messages={conversation?.messages || []} 
                 onMessageClick={setSelectedMessage}
               />
             </ChatPanel>
-            {selectedMessage?.case && (
-              <DetailPanel>
-                <CaseDetailView case={selectedMessage.case} />
-              </DetailPanel>
+            {selectedMessage?.case ? (
+              <>
+                <ResizeHandle onMouseDown={handleRightResizeStart} />
+                <DetailPanel>
+                  <CaseDetailView case={selectedMessage.case} />
+                </DetailPanel>
+              </>
+            ) : (
+              <ResizeHandle onMouseDown={handleRightResizeStart} />
             )}
           </RightPanel>
         </MainContent>

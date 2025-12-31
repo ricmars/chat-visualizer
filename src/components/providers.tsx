@@ -5,11 +5,12 @@ import {
   PopoverManager,
   Toaster,
   LiveLog,
+  Bootes2025Theme
 } from "@pega/cosmos-react-core";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <Configuration>
+    <Configuration theme={Bootes2025Theme}>
       <LiveLog maxLength={50}>
         <PopoverManager>
           <Toaster dismissAfter={5000}>

@@ -63,6 +63,72 @@
       ],
       "type": "string"
     },
+    "Case": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "stages": {
+          "items": {
+            "$ref": "#/definitions/CaseStage"
+          },
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/definitions/CaseStatus"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "status",
+        "stages"
+      ],
+      "type": "object"
+    },
+    "CasePart": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "type": "object"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "case",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "CaseStage": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    },
+    "CaseStatus": {
+      "type": "string"
+    },
     "ChatMessage": {
       "additionalProperties": false,
       "properties": {
@@ -71,6 +137,9 @@
             "$ref": "#/definitions/Action"
           },
           "type": "array"
+        },
+        "case": {
+          "$ref": "#/definitions/Case"
         },
         "parts": {
           "items": {
@@ -344,6 +413,9 @@
         },
         {
           "$ref": "#/definitions/InsightPart"
+        },
+        {
+          "$ref": "#/definitions/CasePart"
         }
       ]
     },

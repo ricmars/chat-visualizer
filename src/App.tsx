@@ -2,17 +2,17 @@ import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { JsonEditor } from "@/components/json-editor"
 import { ChatRenderer } from "@/components/chat-renderer"
-import { exampleConversation } from "@/lib/example-messages"
+import { CaseDetailView } from "@/components/case-detail-view"
 import conversationSchema from "@/lib/schemas/chat-message.schema.json"
-import type { Conversation } from "@/lib/types"
-import { MessageSquare, Code2 } from "lucide-react"
+import type { Conversation, ChatMessage } from "@/lib/types"
+import { MessageSquare } from "lucide-react"
 import { Providers } from "@/components/providers"
 
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff;
+  background: rgb(234, 236, 246);
 `
 
 const Header = styled.header`
@@ -49,12 +49,6 @@ const Title = styled.h1`
   margin: 0;
 `
 
-const Subtitle = styled.p`
-  font-size: 12px;
-  color: #6b7280;
-  margin: 0;
-`
-
 const MainContent = styled.div`
   display: flex;
   flex: 1;
@@ -62,43 +56,51 @@ const MainContent = styled.div`
 `
 
 const Panel = styled.div`
-  width: 50%;
+  width: 800px;
   border-right: 1px solid #e5e7eb;
 `
 
 const RightPanel = styled.div`
-  width: 50%;
-`
-
-const Footer = styled.footer`
-  border-top: 1px solid #e5e7eb;
-  background: rgba(0, 0, 0, 0.02);
-  padding: 8px 24px;
-`
-
-const FooterContent = styled.div`
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #6b7280;
+  overflow: hidden;
 `
 
-const FooterRight = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 8px;
+const ChatPanel = styled.div`
+  width: 900px;
+  border-right: 1px solid #e5e7eb;
+`
+
+const DetailPanel = styled.div`
+  flex: 1;
+  min-width: 0;
+  margin: 1rem;
 `
 
 function App() {
   const [jsonValue, setJsonValue] = useState("")
   const [conversation, setConversation] = useState<Conversation | null>(null)
+  const [selectedMessage, setSelectedMessage] = useState<ChatMessage | null>(null)
+  const [currentSample, setCurrentSample] = useState<string>("sample1.json")
 
   useEffect(() => {
-    // Initialize with example conversation
-    const initialJson = JSON.stringify(exampleConversation, null, 2)
-    setJsonValue(initialJson)
-    setConversation(exampleConversation)
+    // Initialize with sample1.json
+    const loadSample1 = async () => {
+      try {
+        const response = await fetch("/sample1.json")
+        if (!response.ok) {
+          throw new Error("Failed to load sample1.json")
+        }
+        const json = await response.json()
+        const initialJson = JSON.stringify(json, null, 2)
+        setJsonValue(initialJson)
+        setConversation(json)
+        setCurrentSample("sample1.json")
+      } catch (error) {
+        console.error("Error loading sample1.json:", error)
+      }
+    }
+    loadSample1()
   }, [])
 
   const handleJsonChange = (value: string) => {
@@ -109,10 +111,17 @@ function App() {
       const parsed = JSON.parse(value)
       if (parsed && typeof parsed === "object" && parsed.messages) {
         setConversation(parsed)
+        // If the JSON doesn't match any sample, clear current sample
+        // We can't easily detect this, so we'll only clear if user manually edits
+        // The sample will be set when loading from dropdown
       }
     } catch {
       // Invalid JSON, keep previous conversation
     }
+  }
+
+  const handleSampleLoad = (sampleName: string) => {
+    setCurrentSample(sampleName)
   }
 
   return (
@@ -126,31 +135,34 @@ function App() {
               </IconContainer>
               <div>
                 <Title>AI Chat Message Visualizer</Title>
-                <Subtitle>Adaptive UI rendering from JSON schema</Subtitle>
               </div>
             </HeaderInner>
           </HeaderContent>
         </Header>
-
         <MainContent>
           <Panel>
-            <JsonEditor value={jsonValue} onChange={handleJsonChange} schema={conversationSchema} />
+            <JsonEditor 
+              value={jsonValue} 
+              onChange={handleJsonChange} 
+              schema={conversationSchema}
+              currentSample={currentSample}
+              onSampleLoad={handleSampleLoad}
+            />
           </Panel>
-
           <RightPanel>
-            <ChatRenderer messages={conversation?.messages || []} />
+            <ChatPanel>
+              <ChatRenderer 
+                messages={conversation?.messages || []} 
+                onMessageClick={setSelectedMessage}
+              />
+            </ChatPanel>
+            {selectedMessage && (
+              <DetailPanel>
+                <CaseDetailView />
+              </DetailPanel>
+            )}
           </RightPanel>
         </MainContent>
-
-        <Footer>
-          <FooterContent>
-            <span>Schema Version: 1.0.0</span>
-            <FooterRight>
-              <Code2 size={14} />
-              {conversation?.messages.length || 0} message{(conversation?.messages.length || 0) !== 1 ? "s" : ""} loaded
-            </FooterRight>
-          </FooterContent>
-        </Footer>
       </PageContainer>
     </Providers>
   )

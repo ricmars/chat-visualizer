@@ -1,0 +1,110 @@
+{
+  "id": "example-conversation-3",
+  "title": "Case Example",
+  "messages": [
+    {
+      "type": "ui_message",
+      "version": "1.0.0",
+      "role": "assistant",
+      "timestamp": "2024-01-01T00:00:00.000Z",
+      "case": {
+        "id": "CA-1145",
+        "name": "Exclusive Rewards for Loyal Credit Card Users",
+        "status": "filling-out-detail",
+        "stages": [
+          {
+            "id": "creating-new-case",
+            "name": "Creating new case"
+          },
+          {
+            "id": "analyzing-content",
+            "name": "Analyzing content"
+          },
+          {
+            "id": "filling-out-detail",
+            "name": "Filling out provided detail"
+          },
+          {
+            "id": "attributes",
+            "name": "Attributes"
+          },
+          {
+            "id": "availability",
+            "name": "Availability"
+          },
+          {
+            "id": "engagement-policy",
+            "name": "Engagement Policy"
+          },
+          {
+            "id": "channels",
+            "name": "Channels"
+          }
+        ]
+      },
+      "parts": [
+        {
+          "type": "text",
+          "id": "case-intro",
+          "content": "I've created a new campaign case for you. Here are the details:"
+        },
+        {
+          "type": "case",
+          "id": "case-1"
+        }
+      ]
+    },
+    {
+      "type": "ui_message",
+      "version": "1.0.0",
+      "role": "assistant",
+      "timestamp": "2024-01-01T00:00:00.000Z",
+      "case": {
+        "id": "SR-2847",
+        "name": "Payment Processing Issue - Transaction Failed",
+        "status": "investigation",
+        "stages": [
+          {
+            "id": "creating-new-case",
+            "name": "Creating new case"
+          },
+          {
+            "id": "initial-assessment",
+            "name": "Initial Assessment"
+          },
+          {
+            "id": "gathering-information",
+            "name": "Gathering Information"
+          },
+          {
+            "id": "investigation",
+            "name": "Investigation"
+          },
+          {
+            "id": "resolution",
+            "name": "Resolution"
+          },
+          {
+            "id": "verification",
+            "name": "Verification"
+          },
+          {
+            "id": "closed",
+            "name": "Closed"
+          }
+        ]
+      },
+      "parts": [
+        {
+          "type": "text",
+          "id": "case-intro-2",
+          "content": "I've created a new support request case for you. Here are the details:"
+        },
+        {
+          "type": "case",
+          "id": "case-2"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": "example-conversation-2",
+  "title": "JavaScript Example",
+  "messages": [
+    {
+      "type": "ui_message",
+      "version": "1.0.0",
+      "role": "assistant",
+      "timestamp": "2024-01-01T00:00:00.000Z",
+      "parts": [
+        {
+          "type": "text",
+          "id": "code-demo",
+          "content": "Here's a JavaScript example with multiple status states:"
+        },
+        {
+          "type": "code",
+          "id": "js1",
+          "language": "javascript",
+          "filename": "api-handler.js",
+          "content": "async function fetchUserData(userId) {\n  try {\n    const response = await fetch(`/api/users/${userId}`);\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Failed to fetch user:', error);\n    throw error;\n  }\n}",
+          "status": "idle"
+        },
+        {
+          "type": "view",
+          "id": "table-view",
+          "content": {
+            "viewType": "table",
+            "data": [
+              {
+                "id": 1,
+                "name": "Alice Johnson",
+                "status": "Active",
+                "revenue": 45230
+              },
+              {
+                "id": 2,
+                "name": "Bob Smith",
+                "status": "Active",
+                "revenue": 38920
+              },
+              {
+                "id": 3,
+                "name": "Carol Davis",
+                "status": "Pending",
+                "revenue": 12450
+              }
+            ],
+            "config": {
+              "columns": ["id", "name", "status", "revenue"],
+              "sortable": true
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "run-code",
+          "title": "Run Code",
+          "verb": "runAutomation",
+          "payload": {
+            "codeId": "js1"
+          },
+          "status": "idle"
+        },
+        {
+          "id": "open-docs",
+          "title": "View Documentation",
+          "verb": "openUrl",
+          "payload": {
+            "url": "https://docs.example.com/api"
+          },
+          "status": "idle"
+        }
+      ]
+    }
+  ]
+}
+

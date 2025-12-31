@@ -11,6 +11,24 @@ export type ActionVerb = "openUrl" | "submitForm" | "rerunQuery" | "runAutomatio
 
 export type ActionStatus = "idle" | "running" | "success" | "failed"
 
+// Case Status type - can be updated in real time through JSON updates
+// The status should match one of the stage IDs, indicating the current active stage
+export type CaseStatus = string
+
+// Case Stage interface
+export interface CaseStage {
+  id: string
+  name: string
+}
+
+// Case interface
+export interface Case {
+  id: string
+  name: string
+  status: CaseStatus // Maps to one of the stage IDs - all previous stages are completed, this one is active
+  stages: CaseStage[]
+}
+
 // Base Part interface
 export interface BasePart {
   type: string
@@ -84,8 +102,17 @@ export interface InsightPart extends BasePart {
   }
 }
 
+// Case Part (for displaying case information)
+// The case data (id, name, status, stages) is stored at the message level
+// This part just indicates that the message should display case information
+export interface CasePart extends BasePart {
+  type: "case"
+  // Content can be empty or contain additional case-specific data
+  content?: Record<string, any>
+}
+
 // Union type for all parts
-export type MessagePart = TextPart | MarkdownPart | RichTextPart | CodePart | ImagePart | ViewPart | InsightPart
+export type MessagePart = TextPart | MarkdownPart | RichTextPart | CodePart | ImagePart | ViewPart | InsightPart | CasePart
 
 // Action structure
 export interface Action {
@@ -108,6 +135,9 @@ export interface ChatMessage {
   timestamp?: string
   parts: MessagePart[]
   actions?: Action[]
+  // Case metadata - when present, indicates this message is related to a case
+  // Multiple messages can reference the same case
+  case?: Case
 }
 
 // Conversation structure

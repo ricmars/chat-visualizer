@@ -16,6 +16,8 @@ interface JsonEditorProps {
   value: string
   onChange: (value: string) => void
   schema?: any
+  currentSample?: string
+  onSampleLoad?: (sampleName: string) => void
 }
 
 type ViewMode = "edit" | "view"
@@ -33,12 +35,38 @@ const EditorHeader = styled.div`
   border-bottom: 1px solid #e5e7eb;
   background: rgba(0, 0, 0, 0.02);
   padding: 8px 16px;
+  gap: 12px;
 `
 
 const EditorTitle = styled.h2`
   font-size: 14px;
   font-weight: 600;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
+const SampleSelect = styled.select`
+  height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #3F57E4;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #3F57E4;
+    box-shadow: 0 0 0 2px rgba(63, 87, 228, 0.1);
+  }
 `
 
 const HeaderActions = styled.div`
@@ -352,12 +380,38 @@ function removeEmptyEnumValues(obj: any, schema: any, rootSchema: any, path: str
     return obj
 }
 
-export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
+export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoad }: JsonEditorProps) {
   const [errors, setErrors] = useState<string[]>([])
   const [isValid, setIsValid] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>("edit")
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(["root"]))
   const [showErrors, setShowErrors] = useState(false)
+
+  const loadSample = async (sampleName: string) => {
+    if (!sampleName) return
+    
+    try {
+      const response = await fetch(`/${sampleName}`)
+      if (!response.ok) {
+        throw new Error(`Failed to load ${sampleName}`)
+      }
+      const json = await response.json()
+      const prettified = JSON.stringify(json, null, 2)
+      onChange(prettified)
+      if (onSampleLoad) {
+        onSampleLoad(sampleName)
+      }
+    } catch (error) {
+      console.error(`Error loading sample ${sampleName}:`, error)
+    }
+  }
+
+  const handleSampleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const sampleName = e.target.value
+    if (sampleName && sampleName !== currentSample) {
+      loadSample(sampleName)
+    }
+  }
 
   // Create and compile the validator once when schema changes
   const validator = useMemo(() => {
@@ -606,7 +660,14 @@ export function JsonEditor({ value, onChange, schema }: JsonEditorProps) {
   return (
     <EditorContainer>
       <EditorHeader>
-        <EditorTitle>JSON Editor</EditorTitle>
+        <EditorTitle>
+          JSON Editor
+          <SampleSelect value={currentSample || "sample1.json"} onChange={handleSampleChange}>
+            <option value="sample1.json">Sample 1 - Data Analysis</option>
+            <option value="sample2.json">Sample 2 - JavaScript Example</option>
+            <option value="sample3.json">Sample 3 - Case Example</option>
+          </SampleSelect>
+        </EditorTitle>
         <HeaderActions>
           <ButtonGroup>
             <Button

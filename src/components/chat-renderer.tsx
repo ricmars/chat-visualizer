@@ -1,15 +1,18 @@
 
 import type { ChatMessage, MessagePart } from "@/lib/types"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { CodeBlock } from "@/components/code-block"
 import { ImagePart } from "@/components/image-part"
 import { InsightCard } from "@/components/insight-card"
 import { ViewPart } from "@/components/view-part"
+import { CasePart } from "@/components/case-part"
 import { ActionButtons } from "@/components/action-buttons"
 import ReactMarkdown from "react-markdown"
+import { Flex, Icon } from "@pega/cosmos-react-core"
 
 interface ChatRendererProps {
   messages: ChatMessage[]
+  onMessageClick?: (message: ChatMessage) => void
 }
 
 const Container = styled.div`
@@ -40,11 +43,34 @@ const MessagesContainer = styled.div`
   padding: 24px;
 `
 
-const MessageBubbleContainer = styled.div<{ isUser: boolean }>`
+const MessageBubbleContainer = styled.div<{ isUser: boolean; clickable?: boolean }>`
   display: flex;
   width: 100%;
   justify-content: ${props => props.isUser ? 'flex-end' : 'flex-start'};
+  align-items: flex-start;
+  gap: 0.5rem;
+  ${props => props.clickable && !props.isUser && `
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  `}
 `
+
+export const StyledPolarisIcon = styled(Flex)(({ theme }) => {
+  return css`
+    border-radius: 50%;
+    color: ${theme.base.palette.light};
+    background: #681fc3;
+    width: 32px;
+    height: 32px;
+    margin-inline-end: 0.5rem;
+    & > svg {
+      height: 20px;
+      width: 20px;
+    }
+  `;
+});
 
 const MessageContent = styled.div<{ isUser: boolean }>`
   max-width: 85%;
@@ -95,7 +121,7 @@ const RichTextPart = styled(PartBase)`
   `}
 `
 
-export function ChatRenderer({ messages }: ChatRendererProps) {
+export function ChatRenderer({ messages, onMessageClick }: ChatRendererProps) {
   return (
     <Container>
       <Header>
@@ -104,21 +130,40 @@ export function ChatRenderer({ messages }: ChatRendererProps) {
 
       <MessagesContainer>
         {messages.map((message, idx) => (
-          <MessageBubble key={idx} message={message} />
+          <MessageBubble 
+            key={idx} 
+            message={message} 
+            onClick={() => onMessageClick?.(message)}
+          />
         ))}
       </MessagesContainer>
     </Container>
   )
 }
 
-function MessageBubble({ message }: { message: ChatMessage }) {
+function MessageBubble({ message, onClick }: { message: ChatMessage; onClick?: () => void }) {
   const isUser = message.role === "user"
 
   return (
-    <MessageBubbleContainer isUser={isUser}>
+    <MessageBubbleContainer 
+      isUser={isUser} 
+      clickable={!!onClick && !isUser}
+      onClick={onClick}
+    >
+      {!isUser && (
+        <StyledPolarisIcon
+          container={{
+            inline: true,
+            alignItems: "center",
+            justify: "center",
+          }}
+        >
+          <Icon name="polaris-solid" size="m" />
+        </StyledPolarisIcon>
+      )}
       <MessageContent isUser={isUser}>
         {message.parts.map((part) => (
-          <PartRenderer key={part.id} part={part} isUser={isUser} />
+          <PartRenderer key={part.id} part={part} isUser={isUser} message={message} />
         ))}
 
         {message.actions && message.actions.length > 0 && <ActionButtons actions={message.actions} />}
@@ -127,7 +172,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   )
 }
 
-function PartRenderer({ part, isUser }: { part: MessagePart; isUser: boolean }) {
+function PartRenderer({ part, isUser, message }: { part: MessagePart; isUser: boolean; message: ChatMessage }) {
   switch (part.type) {
     case "text":
       return (
@@ -162,6 +207,9 @@ function PartRenderer({ part, isUser }: { part: MessagePart; isUser: boolean }) 
 
     case "view":
       return <ViewPart part={part} />
+
+    case "case":
+      return <CasePart part={part} message={message} />
 
     default:
       return null

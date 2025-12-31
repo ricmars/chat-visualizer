@@ -61,7 +61,7 @@ const MainContent = styled.div`
 `
 
 const Panel = styled.div`
-  width: 800px;
+  width: 600px;
   border-right: 1px solid #e5e7eb;
 `
 
@@ -72,7 +72,7 @@ const RightPanel = styled.div`
 `
 
 const ChatPanel = styled.div`
-  width: 900px;
+  width: 650px;
   border-right: 1px solid #e5e7eb;
 `
 

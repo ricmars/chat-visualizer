@@ -1,7 +1,7 @@
 
 import type { CodePart } from "@/lib/types"
 import styled from "styled-components"
-import { CheckCircle2, XCircle, Loader2, Clock } from "lucide-react"
+import { Icon, Progress } from "@pega/cosmos-react-core"
 
 interface CodeBlockProps {
   part: CodePart
@@ -91,15 +91,15 @@ const OutputContent = styled.pre`
 `
 
 export function CodeBlock({ part }: CodeBlockProps) {
-  const statusIcons = {
-    queued: Clock,
-    running: Loader2,
-    success: CheckCircle2,
-    error: XCircle,
+  const statusIcons: Record<string, string | null> = {
+    queued: "clock",
+    running: null, // Will use Progress component
+    success: "check",
+    error: "times",
     idle: null,
   }
 
-  const StatusIcon = part.status ? statusIcons[part.status] : null
+  const statusIconName = part.status ? statusIcons[part.status] : null
 
   return (
     <Card>
@@ -108,9 +108,13 @@ export function CodeBlock({ part }: CodeBlockProps) {
           <Badge>{part.language}</Badge>
           {part.filename && <Filename>{part.filename}</Filename>}
         </HeaderLeft>
-        {part.status && StatusIcon && (
+        {part.status && (
           <StatusContainer status={part.status}>
-            <StatusIcon size={14} style={part.status === "running" ? { animation: 'spin 1s linear infinite' } : undefined} />
+            {part.status === "running" ? (
+              <Progress variant="ring" placement="inline" />
+            ) : statusIconName ? (
+              <Icon name={statusIconName} size="s" />
+            ) : null}
             {part.status}
           </StatusContainer>
         )}

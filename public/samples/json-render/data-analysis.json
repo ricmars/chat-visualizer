@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-render.dev/schemas/tree.json",
+  "version": "1.0",
+  "root": {
+    "type": "Container",
+    "props": {
+      "direction": "column",
+      "gap": "lg"
+    },
+    "children": [
+      {
+        "type": "Text",
+        "props": {
+          "content": "Can you help me analyze this data and create a visualization?",
+          "variant": "user",
+          "className": "text-blue-600"
+        }
+      },
+      {
+        "type": "Text",
+        "props": {
+          "content": "I'll help you analyze the data. Let me start by processing it:",
+          "variant": "assistant"
+        }
+      },
+      {
+        "type": "CodeBlock",
+        "props": {
+          "code": "import pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load and process data\ndf = pd.read_csv('sales_data.csv')\nsummary = df.groupby('category').sum()\n\nprint(summary)",
+          "language": "python",
+          "filename": "data_analysis.py",
+          "showLineNumbers": true
+        }
+      },
+      {
+        "type": "Output",
+        "props": {
+          "content": "Analysis complete. 3 categories processed with total revenue: $125,430",
+          "variant": "success"
+        }
+      },
+      {
+        "type": "Card",
+        "props": {
+          "variant": "success",
+          "className": "border-l-4 border-green-500"
+        },
+        "children": [
+          {
+            "type": "Text",
+            "props": {
+              "content": "Sales Performance Summary",
+              "variant": "heading",
+              "className": "font-bold text-lg"
+            }
+          },
+          {
+            "type": "Text",
+            "props": {
+              "content": "Your top performing category increased by 23% compared to last quarter."
+            }
+          },
+          {
+            "type": "MetricGrid",
+            "props": {
+              "metrics": [
+                { "label": "Total Revenue", "value": "$125,430" },
+                { "label": "Growth Rate", "value": "23%" },
+                { "label": "Top Category", "value": "Electronics" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Image",
+        "props": {
+          "src": "/sales-chart-visualization.jpg",
+          "alt": "Sales performance chart showing category breakdown",
+          "className": "max-w-full rounded-lg"
+        }
+      },
+      {
+        "type": "Text",
+        "props": {
+          "content": "Quarterly sales by category",
+          "variant": "caption",
+          "className": "text-center text-gray-500 text-sm"
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "## Analysis Results\n\nBased on the data analysis:\n\n- **Electronics** leads with 45% of total revenue\n- **Clothing** shows steady growth at 12% increase\n- **Home & Garden** remains stable with minor fluctuations\n\n### Recommendations\n\n1. Invest more in Electronics inventory\n2. Run promotional campaigns for Clothing\n3. Monitor Home & Garden trends closely"
+        }
+      },
+      {
+        "type": "Table",
+        "props": {
+          "columns": [
+            { "key": "id", "header": "ID", "sortable": true },
+            { "key": "name", "header": "Name", "sortable": true },
+            { "key": "status", "header": "Status", "sortable": true },
+            { "key": "revenue", "header": "Revenue", "sortable": true }
+          ],
+          "data": [
+            { "id": 1, "name": "Alice Johnson", "status": "Active", "revenue": 45230 },
+            { "id": 2, "name": "Bob Smith", "status": "Active", "revenue": 38920 },
+            { "id": 3, "name": "Carol Davis", "status": "Pending", "revenue": 12450 }
+          ],
+          "striped": true,
+          "hoverable": true
+        }
+      },
+      {
+        "type": "Container",
+        "props": {
+          "direction": "row",
+          "gap": "sm"
+        },
+        "children": [
+          {
+            "type": "Button",
+            "props": {
+              "label": "Export Report",
+              "variant": "primary"
+            },
+            "actions": {
+              "name": "downloadFile",
+              "params": { "filename": "sales_report.pdf", "url": "/api/export" }
+            }
+          },
+          {
+            "type": "Button",
+            "props": {
+              "label": "Rerun Analysis",
+              "variant": "secondary"
+            },
+            "actions": {
+              "name": "rerunQuery",
+              "params": { "analysisId": "analysis-001" }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

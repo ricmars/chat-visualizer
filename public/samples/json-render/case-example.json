@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-render.dev/schemas/tree.json",
+  "version": "1.0",
+  "root": {
+    "type": "Container",
+    "props": {
+      "direction": "column",
+      "gap": "lg"
+    },
+    "children": [
+      {
+        "type": "Text",
+        "props": {
+          "content": "Perfect! I have everything I need to build your campaign, would you like to start the workflow?",
+          "variant": "assistant"
+        }
+      },
+      {
+        "type": "Card",
+        "props": {
+          "variant": "elevated",
+          "className": "border-l-4 border-blue-500"
+        },
+        "children": [
+          {
+            "type": "Text",
+            "props": {
+              "content": "Exclusive Rewards for Loyal Credit Card Users",
+              "variant": "heading",
+              "className": "font-bold text-xl"
+            }
+          },
+          {
+            "type": "MetricGrid",
+            "props": {
+              "metrics": [
+                { "label": "Case ID", "value": "CA-1145" },
+                { "label": "Current Stage", "value": "Filling out provided detail" },
+                { "label": "Progress", "value": "3 of 7" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Stepper",
+        "props": {
+          "steps": [
+            { "id": "creating-new-case", "label": "Creating new case", "status": "completed" },
+            { "id": "analyzing-content", "label": "Analyzing content", "status": "completed" },
+            { "id": "filling-out-detail", "label": "Filling out provided detail", "status": "current" },
+            { "id": "attributes", "label": "Attributes", "status": "pending" },
+            { "id": "availability", "label": "Availability", "status": "pending" },
+            { "id": "engagement-policy", "label": "Engagement Policy", "status": "pending" },
+            { "id": "channels", "label": "Channels", "status": "pending" }
+          ],
+          "currentStep": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "## Attributes Details\n\nI've gotten as far as defining attributes and pre-filled the following details:\n\n- **Name**: Exclusive Rewards for Loyal Credit Card Users\n- **Description**: Reward loyal customers with exclusive offers on credit cards if they use their card twice a month.\n- **Product & Services**: U+ Bank Gold Credit Card\n- **Outcome**: Retain\n\nI need some additional information:\n\n- **Keycode**: (a unique identifier for tracking the campaign)\n- **Product ID**: (the identifier for this card product) In the past you have used \"A1455\"\n\nOnce we have those details, we can define the availability next."
+        }
+      },
+      {
+        "type": "Text",
+        "props": {
+          "content": "Keycode is 1234, Product ID is A1455",
+          "variant": "user",
+          "className": "text-blue-600"
+        }
+      },
+      {
+        "type": "Text",
+        "props": {
+          "content": "Great! Lets continue onto defining the rest of the campaign....",
+          "variant": "assistant"
+        }
+      },
+      {
+        "type": "Card",
+        "props": {
+          "variant": "info",
+          "className": "border-l-4 border-blue-400"
+        },
+        "children": [
+          {
+            "type": "Markdown",
+            "props": {
+              "content": "We found another campaign called \"U+ Bank Credit Card\" has a similar engagement policy that has been approved by Legal and Compliance.\n\nThe differences are:\n\n- Age is greater than 24 instead of 25\n- Customer annual income is greater than or equal to 10,000 instead of 5,000\n\nReusing a pre-approved policy typically reduces build time by 5 days!\n\nWould you like to use the pre-approved policy?"
+            }
+          }
+        ]
+      },
+      {
+        "type": "Container",
+        "props": {
+          "direction": "row",
+          "gap": "sm"
+        },
+        "children": [
+          {
+            "type": "Button",
+            "props": {
+              "label": "Yes, use the approved policy",
+              "variant": "primary"
+            },
+            "actions": {
+              "name": "submitForm",
+              "params": { "choice": "approved" }
+            }
+          },
+          {
+            "type": "Button",
+            "props": {
+              "label": "No, use my own",
+              "variant": "secondary"
+            },
+            "actions": {
+              "name": "submitForm",
+              "params": { "choice": "custom" }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

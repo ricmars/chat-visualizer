@@ -7,6 +7,10 @@ import {
   LiveLog,
   Bootes2025Theme
 } from "@pega/cosmos-react-core";
+import { registerCosmosIcons } from "@/lib/cosmos-icons";
+
+// Register cosmos icons once
+registerCosmosIcons();
 
 export function Providers({ children }: { children: ReactNode }) {
   return (

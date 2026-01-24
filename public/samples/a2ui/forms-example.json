@@ -1,0 +1,136 @@
+{
+  "@context": "https://schema.google.com/a2ui",
+  "@type": "Document",
+  "version": "1.0",
+  "elements": [
+    {
+      "@type": "TextBlock",
+      "id": "user-request",
+      "content": "I need to submit a customer feedback form",
+      "properties": {
+        "role": "user"
+      },
+      "style": {
+        "variant": "user-message",
+        "color": "primary"
+      }
+    },
+    {
+      "@type": "TextBlock",
+      "id": "assistant-intro",
+      "content": "I can help you submit customer feedback. Here's the form:",
+      "properties": {
+        "role": "assistant"
+      },
+      "style": {
+        "variant": "assistant-message"
+      }
+    },
+    {
+      "@type": "Card",
+      "id": "feedback-form-card",
+      "content": [
+        {
+          "@type": "Heading",
+          "content": "Customer Feedback Form",
+          "style": { "size": "lg" }
+        },
+        {
+          "@type": "Form",
+          "id": "feedback-form",
+          "content": [
+            {
+              "@type": "TextField",
+              "id": "customer-name",
+              "properties": {
+                "label": "Customer Name",
+                "placeholder": "Enter your full name",
+                "required": true
+              }
+            },
+            {
+              "@type": "TextField",
+              "id": "email",
+              "properties": {
+                "label": "Email Address",
+                "placeholder": "your.email@example.com",
+                "inputType": "email",
+                "required": true
+              }
+            },
+            {
+              "@type": "SelectField",
+              "id": "feedback-type",
+              "properties": {
+                "label": "Feedback Type",
+                "options": [
+                  { "value": "general", "label": "General Feedback" },
+                  { "value": "product", "label": "Product Feedback" },
+                  { "value": "service", "label": "Service Feedback" },
+                  { "value": "complaint", "label": "Complaint" },
+                  { "value": "suggestion", "label": "Suggestion" }
+                ],
+                "required": true
+              }
+            },
+            {
+              "@type": "RatingField",
+              "id": "satisfaction",
+              "properties": {
+                "label": "Overall Satisfaction",
+                "maxRating": 5,
+                "required": true
+              }
+            },
+            {
+              "@type": "TextArea",
+              "id": "comments",
+              "properties": {
+                "label": "Comments",
+                "placeholder": "Please share your detailed feedback...",
+                "rows": 4
+              }
+            }
+          ]
+        }
+      ],
+      "style": {
+        "variant": "elevated"
+      }
+    },
+    {
+      "@type": "Alert",
+      "id": "privacy-notice",
+      "content": [
+        {
+          "@type": "TextBlock",
+          "content": "Your feedback is confidential and will be used to improve our services. We will not share your information with third parties."
+        }
+      ],
+      "style": {
+        "variant": "informational"
+      }
+    },
+    {
+      "@type": "ActionGroup",
+      "id": "form-actions",
+      "content": [
+        {
+          "@type": "Action",
+          "name": "submitForm",
+          "label": "Submit Feedback",
+          "parameters": { "formId": "feedback-form" }
+        },
+        {
+          "@type": "Action",
+          "name": "cancel",
+          "label": "Cancel"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "timestamp": "2024-01-01T00:00:00.000Z",
+    "source": "pega-chat-transform"
+  }
+}

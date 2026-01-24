@@ -1,6 +1,6 @@
 import type { CasePart as CasePartType, ChatMessage } from "@/lib/types"
 import styled from "styled-components"
-import { Link, Check } from "lucide-react"
+import { Icon } from "@pega/cosmos-react-core"
 
 interface CasePartProps {
   part: CasePartType
@@ -100,7 +100,7 @@ const StagesList = styled.div`
   padding-left: 20px;
 `
 
-const StageItem = styled.div<{ isCompleted: boolean; isActive: boolean }>`
+const StageItem = styled.div<{ $isCompleted: boolean; $isActive: boolean }>`
   display: flex;
   align-items: center;
   gap: 12px;
@@ -111,7 +111,7 @@ const StageItem = styled.div<{ isCompleted: boolean; isActive: boolean }>`
     padding-bottom: 0;
   }
   
-  ${props => !props.isCompleted && !props.isActive && `
+  ${props => !props.$isCompleted && !props.$isActive && `
     &::before {
       content: '';
       position: absolute;
@@ -123,7 +123,7 @@ const StageItem = styled.div<{ isCompleted: boolean; isActive: boolean }>`
     }
   `}
   
-  ${props => props.isCompleted && `
+  ${props => props.$isCompleted && `
     &::before {
       content: '';
       position: absolute;
@@ -135,7 +135,7 @@ const StageItem = styled.div<{ isCompleted: boolean; isActive: boolean }>`
     }
   `}
   
-  ${props => props.isActive && `
+  ${props => props.$isActive && `
     &::before {
       content: '';
       position: absolute;
@@ -148,12 +148,12 @@ const StageItem = styled.div<{ isCompleted: boolean; isActive: boolean }>`
   `}
 `
 
-const StageCircle = styled.div<{ isCompleted: boolean; isActive: boolean }>`
+const StageCircle = styled.div<{ $isCompleted: boolean; $isActive: boolean }>`
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: ${props => props.isCompleted ? 'none' : props.isActive ? '2px solid #3F57E4' : '2px solid #d1d5db'};
-  background: ${props => props.isCompleted ? '#10b981' : props.isActive ? '#fff' : '#fff'};
+  border: ${props => props.$isCompleted ? 'none' : props.$isActive ? '2px solid #3F57E4' : '2px solid #d1d5db'};
+  background: ${props => props.$isCompleted ? '#10b981' : props.$isActive ? '#fff' : '#fff'};
   position: relative;
   flex-shrink: 0;
   z-index: 1;
@@ -161,7 +161,7 @@ const StageCircle = styled.div<{ isCompleted: boolean; isActive: boolean }>`
   align-items: center;
   justify-content: center;
   
-  ${props => props.isActive && `
+  ${props => props.$isActive && `
     &::after {
       content: '';
       position: absolute;
@@ -176,17 +176,24 @@ const StageCircle = styled.div<{ isCompleted: boolean; isActive: boolean }>`
   `}
 `
 
-const CheckIcon = styled(Check)`
+const CheckIconWrapper = styled.div`
   width: 10px;
   height: 10px;
   color: white;
-  stroke-width: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  svg {
+    width: 10px;
+    height: 10px;
+  }
 `
 
-const StageName = styled.span<{ isCompleted: boolean; isActive: boolean }>`
+const StageName = styled.span<{ $isCompleted: boolean; $isActive: boolean }>`
   font-size: 14px;
-  color: ${props => props.isActive ? '#111827' : props.isCompleted ? '#111827' : '#6b7280'};
-  font-weight: ${props => props.isActive ? '500' : '400'};
+  color: ${props => props.$isActive ? '#111827' : props.$isCompleted ? '#111827' : '#6b7280'};
+  font-weight: ${props => props.$isActive ? '500' : '400'};
 `
 
 export function CasePart({ part: _part, message }: CasePartProps) {
@@ -215,7 +222,7 @@ export function CasePart({ part: _part, message }: CasePartProps) {
         </CaseHeaderLeft>
         <CaseHeaderRight>
           <LinkIcon>
-            <Link size={16} />
+            <Icon name="chain" size="s" />
           </LinkIcon>
         </CaseHeaderRight>
       </CaseHeader>
@@ -232,11 +239,11 @@ export function CasePart({ part: _part, message }: CasePartProps) {
               const isActive = currentStageIndex === index
               
               return (
-                <StageItem key={stage.id} isCompleted={isCompleted} isActive={isActive}>
-                  <StageCircle isCompleted={isCompleted} isActive={isActive}>
-                    {isCompleted && <CheckIcon />}
+                <StageItem key={stage.id} $isCompleted={isCompleted} $isActive={isActive}>
+                  <StageCircle $isCompleted={isCompleted} $isActive={isActive}>
+                    {isCompleted && <CheckIconWrapper><Icon name="check" size="s" /></CheckIconWrapper>}
                   </StageCircle>
-                  <StageName isCompleted={isCompleted} isActive={isActive}>
+                  <StageName $isCompleted={isCompleted} $isActive={isActive}>
                     {stage.name}
                   </StageName>
                 </StageItem>

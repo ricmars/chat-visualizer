@@ -2,7 +2,7 @@
 import { useState } from "react"
 import styled from "styled-components"
 import type { Action } from "@/lib/types"
-import { Loader2, XCircle } from "lucide-react"
+import { Icon, Progress } from "@pega/cosmos-react-core"
 
 interface ActionButtonsProps {
   actions: Action[]
@@ -15,7 +15,7 @@ const Container = styled.div`
   justify-content: flex-end;
 `
 
-const ActionButton = styled.button<{ status?: string; $isSelected?: boolean }>`
+const ActionButton = styled.button<{ $status?: string; $isSelected?: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -38,7 +38,7 @@ const ActionButton = styled.button<{ status?: string; $isSelected?: boolean }>`
     cursor: not-allowed;
   }
 
-  ${props => props.status === "failed" && `
+  ${props => props.$status === "failed" && `
     background: #ef4444;
     color: #FFF;
   `}
@@ -71,13 +71,13 @@ export function ActionButtons({ actions }: ActionButtonsProps) {
         return (
           <ActionButton
             key={action.id}
-            status={status}
+            $status={status}
             $isSelected={isSelected}
             onClick={() => handleAction(action)}
             disabled={status === "running"}
           >
-            {status === "running" && <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />}
-            {status === "failed" && <XCircle size={14} />}
+            {status === "running" && <Progress variant="ring" placement="inline" />}
+            {status === "failed" && <Icon name="times" size="s" />}
             {action.title}
           </ActionButton>
         )

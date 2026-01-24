@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-render.dev/schemas/tree.json",
+  "version": "1.0",
+  "root": {
+    "type": "Container",
+    "props": {
+      "direction": "column",
+      "gap": "lg"
+    },
+    "children": [
+      {
+        "type": "Text",
+        "props": {
+          "content": "Create a dashboard showing our key metrics",
+          "variant": "user",
+          "className": "text-blue-600"
+        }
+      },
+      {
+        "type": "Text",
+        "props": {
+          "content": "Here's your executive dashboard with real-time metrics:",
+          "variant": "assistant"
+        }
+      },
+      {
+        "type": "Container",
+        "props": {
+          "direction": "row",
+          "gap": "md",
+          "className": "flex-wrap"
+        },
+        "children": [
+          {
+            "type": "Card",
+            "props": {
+              "variant": "default",
+              "className": "flex-1 min-w-[200px]"
+            },
+            "children": [
+              {
+                "type": "Text",
+                "props": {
+                  "content": "Monthly Revenue",
+                  "variant": "label",
+                  "className": "text-gray-500 text-sm"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "$1.2M",
+                  "variant": "heading",
+                  "className": "font-bold text-3xl text-green-600"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "↑ 12.5% from last month",
+                  "className": "text-green-500 text-sm"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "variant": "default",
+              "className": "flex-1 min-w-[200px]"
+            },
+            "children": [
+              {
+                "type": "Text",
+                "props": {
+                  "content": "Active Users",
+                  "variant": "label",
+                  "className": "text-gray-500 text-sm"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "48,392",
+                  "variant": "heading",
+                  "className": "font-bold text-3xl text-blue-600"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "↑ 8.2% from last month",
+                  "className": "text-green-500 text-sm"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "variant": "default",
+              "className": "flex-1 min-w-[200px]"
+            },
+            "children": [
+              {
+                "type": "Text",
+                "props": {
+                  "content": "Conversion Rate",
+                  "variant": "label",
+                  "className": "text-gray-500 text-sm"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "3.42%",
+                  "variant": "heading",
+                  "className": "font-bold text-3xl text-purple-600"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "↓ 0.3% from last month",
+                  "className": "text-red-500 text-sm"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "variant": "default",
+              "className": "flex-1 min-w-[200px]"
+            },
+            "children": [
+              {
+                "type": "Text",
+                "props": {
+                  "content": "Support Tickets",
+                  "variant": "label",
+                  "className": "text-gray-500 text-sm"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "127",
+                  "variant": "heading",
+                  "className": "font-bold text-3xl text-orange-600"
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "content": "↓ 15% from last month",
+                  "className": "text-green-500 text-sm"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Chart",
+        "props": {
+          "chartType": "line",
+          "data": {
+            "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            "datasets": [
+              {
+                "label": "Revenue",
+                "data": [850000, 920000, 980000, 1050000, 1120000, 1200000]
+              },
+              {
+                "label": "Costs",
+                "data": [420000, 450000, 460000, 480000, 490000, 510000]
+              }
+            ]
+          },
+          "config": {
+            "title": "Revenue vs Costs Trend"
+          }
+        }
+      },
+      {
+        "type": "Table",
+        "props": {
+          "columns": [
+            { "key": "region", "header": "Region", "sortable": true },
+            { "key": "revenue", "header": "Revenue", "sortable": true },
+            { "key": "users", "header": "Users", "sortable": true },
+            { "key": "growth", "header": "Growth", "sortable": true }
+          ],
+          "data": [
+            { "region": "North America", "revenue": "$520K", "users": "18,234", "growth": "+15%" },
+            { "region": "Europe", "revenue": "$380K", "users": "14,892", "growth": "+12%" },
+            { "region": "Asia Pacific", "revenue": "$210K", "users": "10,456", "growth": "+28%" },
+            { "region": "Latin America", "revenue": "$90K", "users": "4,810", "growth": "+22%" }
+          ],
+          "striped": true,
+          "hoverable": true
+        }
+      },
+      {
+        "type": "Container",
+        "props": {
+          "direction": "row",
+          "gap": "sm"
+        },
+        "children": [
+          {
+            "type": "Button",
+            "props": {
+              "label": "Export Dashboard",
+              "variant": "primary"
+            },
+            "actions": {
+              "name": "export_report",
+              "params": { "format": "pdf" }
+            }
+          },
+          {
+            "type": "Button",
+            "props": {
+              "label": "Refresh Data",
+              "variant": "secondary"
+            },
+            "actions": {
+              "name": "refresh_data"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

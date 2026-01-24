@@ -13,9 +13,9 @@
 # testing
 /coverage
 
-# Vite
-/dist
-/.vite
+# next.js
+/.next/
+/out/
 
 # production
 /build
@@ -39,6 +39,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+next-env.d.ts
 
 #firebase
 .firebaserc

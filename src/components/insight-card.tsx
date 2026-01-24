@@ -1,16 +1,16 @@
 
 import type { InsightPart } from "@/lib/types"
 import styled from "styled-components"
-import { AlertCircle, AlertTriangle, CheckCircle2, Info } from "lucide-react"
+import { Icon } from "@pega/cosmos-react-core"
 
 interface InsightCardProps {
   part: InsightPart
 }
 
-const Card = styled.div<{ bg?: string }>`
+const Card = styled.div<{ $bg?: string }>`
   border: 2px solid #e5e7eb;
   border-radius: 8px;
-  background: ${props => props.bg || '#fff'};
+  background: ${props => props.$bg || '#fff'};
 `
 
 const CardHeader = styled.div`
@@ -72,9 +72,9 @@ const MetricValue = styled.p`
   margin: 0;
 `
 
-const IconWrapper = styled.div<{ color?: string }>`
+const IconWrapper = styled.div<{ $color?: string }>`
   margin-top: 2px;
-  color: ${props => props.color || '#374151'};
+  color: ${props => props.$color || '#374151'};
 `
 
 export function InsightCard({ part }: InsightCardProps) {
@@ -82,21 +82,20 @@ export function InsightCard({ part }: InsightCardProps) {
   const severity = content.severity || "info"
 
   const severityConfig = {
-    info: { icon: Info, color: "#2563eb", bg: "#eff6ff" },
-    warning: { icon: AlertTriangle, color: "#d97706", bg: "#fffbeb" },
-    error: { icon: AlertCircle, color: "#ef4444", bg: "#fef2f2" },
-    success: { icon: CheckCircle2, color: "#10b981", bg: "#f0fdf4" },
+    info: { iconName: "information", color: "#2563eb", bg: "#eff6ff" },
+    warning: { iconName: "warn", color: "#d97706", bg: "#fffbeb" },
+    error: { iconName: "warn", color: "#ef4444", bg: "#fef2f2" },
+    success: { iconName: "check", color: "#10b981", bg: "#f0fdf4" },
   }
 
   const config = severityConfig[severity]
-  const Icon = config.icon
 
   return (
-    <Card bg={config.bg}>
+    <Card $bg={config.bg}>
       <CardHeader>
         <HeaderContent>
-          <IconWrapper color={config.color}>
-            <Icon size={20} />
+          <IconWrapper $color={config.color}>
+            <Icon name={config.iconName} size="s" />
           </IconWrapper>
           <HeaderText>
             <CardTitle>{content.title}</CardTitle>

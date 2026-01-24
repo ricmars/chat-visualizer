@@ -1,9 +1,8 @@
-import { Card, CardContent, MultiStepForm } from "@pega/cosmos-react-core"
+import { Card, CardContent, MultiStepForm, Icon } from "@pega/cosmos-react-core"
 import type { Step } from "@pega/cosmos-react-core/lib/components/MultiStepForm/MultiStepForm.types"
 import { Details, Stages } from "@pega/cosmos-react-work"
 import type { StageProps } from "@pega/cosmos-react-work/lib/components/Stages/Stages.types"
 import styled from "styled-components"
-import { Pencil } from "lucide-react"
 import { useMemo } from "react"
 import type { Case } from "@/lib/types"
 
@@ -290,7 +289,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Eligibility</SectionTitle>
               <EditIcon aria-label="Edit Eligibility">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -306,7 +305,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Applicability</SectionTitle>
               <EditIcon aria-label="Edit Applicability">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -322,7 +321,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Suitability</SectionTitle>
               <EditIcon aria-label="Edit Suitability">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -338,7 +337,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Contact Policy</SectionTitle>
               <EditIcon aria-label="Edit Contact Policy">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>{campaignDetails.contactPolicy}</SectionContent>
@@ -354,7 +353,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Issue Description</SectionTitle>
               <EditIcon aria-label="Edit Issue Description">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -370,7 +369,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Investigation</SectionTitle>
               <EditIcon aria-label="Edit Investigation">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -386,7 +385,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Resolution</SectionTitle>
               <EditIcon aria-label="Edit Resolution">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -402,7 +401,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Notes</SectionTitle>
               <EditIcon aria-label="Edit Notes">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>{supportDetails.notes}</SectionContent>
@@ -418,7 +417,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Eligibility</SectionTitle>
               <EditIcon aria-label="Edit Eligibility">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -434,7 +433,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Applicability</SectionTitle>
               <EditIcon aria-label="Edit Applicability">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>
@@ -450,7 +449,7 @@ export function CaseDetailView({ case: caseInfo }: CaseDetailViewProps) {
             <SectionHeader>
               <SectionTitle>Suitability</SectionTitle>
               <EditIcon aria-label="Edit Suitability">
-                <Pencil size={14} />
+                <Icon name="pencil" size="s" />
               </EditIcon>
             </SectionHeader>
             <SectionContent>

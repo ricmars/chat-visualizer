@@ -100,6 +100,8 @@ export interface InsightPart extends BasePart {
     metrics?: Array<{
       label: string
       value: string | number
+      unit?: string
+      trend?: "up" | "down" | "neutral"
     }>
   }
 }
@@ -123,6 +125,8 @@ export interface Action {
   verb: ActionVerb
   payload?: Record<string, any>
   status?: ActionStatus
+  style?: "primary" | "secondary" | "danger"
+  disabled?: boolean
   output?: {
     type: string
     data: any

@@ -1,0 +1,330 @@
+{
+  "id": "example-conversation-3-adaptive",
+  "title": "Case Example (Adaptive Cards)",
+  "platform": "adaptive-cards",
+  "cards": [
+    {
+      "type": "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.5",
+      "body": [
+        {
+          "type": "TextBlock",
+          "text": "Perfect! I have everything I need to build your campaign, would you like to start the workflow?",
+          "wrap": true
+        }
+      ]
+    },
+    {
+      "type": "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.5",
+      "body": [
+        {
+          "type": "Container",
+          "style": "accent",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Exclusive Rewards for Loyal Credit Card Users",
+              "weight": "Bolder",
+              "size": "Large"
+            },
+            {
+              "type": "FactSet",
+              "facts": [
+                {
+                  "title": "Case ID",
+                  "value": "CA-1145"
+                },
+                {
+                  "title": "Current Stage",
+                  "value": "Filling out provided detail"
+                },
+                {
+                  "title": "Progress",
+                  "value": "3 of 7"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Container",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Workflow Progress",
+              "weight": "Bolder",
+              "spacing": "Medium"
+            },
+            {
+              "type": "ColumnSet",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "✅ Creating new case",
+                      "size": "Small",
+                      "color": "Good"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "✅ Analyzing content",
+                      "size": "Small",
+                      "color": "Good"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "🔵 Filling out provided detail",
+                      "size": "Small",
+                      "weight": "Bolder",
+                      "color": "Accent"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "⚪ Attributes",
+                      "size": "Small"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "⚪ Availability",
+                      "size": "Small"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "⚪ Engagement Policy",
+                      "size": "Small"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "⚪ Channels",
+                      "size": "Small"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "TextBlock",
+          "text": "## Attributes Details\n\nI've gotten as far as defining attributes and pre-filled the following details:\n\n- **Name**: Exclusive Rewards for Loyal Credit Card Users\n- **Description**: Reward loyal customers with exclusive offers on credit cards if they use their card twice a month.\n- **Product & Services**: U+ Bank Gold Credit Card\n- **Outcome**: Retain\n\nI need some additional information:\n\n- **Keycode**: (a unique identifier for tracking the campaign)\n- **Product ID**: (the identifier for this card product) In the past you have used \"A1455\"\n\nOnce we have those details, we can define the availability next.",
+          "wrap": true
+        },
+        {
+          "type": "TextBlock",
+          "text": "Keycode is 1234, Product ID is A1455",
+          "wrap": true,
+          "color": "Accent"
+        },
+        {
+          "type": "TextBlock",
+          "text": "Great! Lets continue onto defining the rest of the campaign....",
+          "wrap": true
+        },
+        {
+          "type": "TextBlock",
+          "text": "We found another campaign called \"U+ Bank Credit Card\" has a similar engagement policy that has been approved by Legal and Compliance.\n\nThe differences are:\n\n- Age is greater than 24 instead of 25\n - Customer annual income is greater than or equal to 10,000 instead of 5,000\n\nReusing a pre-approved policy typically reduces build time by 5 days!\n\nWould you like to use the pre-approved policy?",
+          "wrap": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "Action.Submit",
+          "title": "Yes, use the approved policy",
+          "data": {
+            "actionId": "yes",
+            "verb": "submitForm"
+          }
+        },
+        {
+          "type": "Action.Submit",
+          "title": "No, use my own",
+          "data": {
+            "actionId": "rerun",
+            "verb": "submitForm"
+          }
+        }
+      ]
+    },
+    {
+      "type": "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.5",
+      "body": [
+        {
+          "type": "Container",
+          "style": "accent",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Payment Processing Issue - Transaction Failed",
+              "weight": "Bolder",
+              "size": "Large"
+            },
+            {
+              "type": "FactSet",
+              "facts": [
+                {
+                  "title": "Case ID",
+                  "value": "SR-2847"
+                },
+                {
+                  "title": "Current Stage",
+                  "value": "Investigation"
+                },
+                {
+                  "title": "Progress",
+                  "value": "4 of 7"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "TextBlock",
+          "text": "I've created a new support request case for you. Here are the details:",
+          "wrap": true
+        },
+        {
+          "type": "Container",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Workflow Progress",
+              "weight": "Bolder",
+              "spacing": "Medium"
+            },
+            {
+              "type": "ColumnSet",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "✅ Creating new case",
+                      "size": "Small",
+                      "color": "Good"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "✅ Initial Assessment",
+                      "size": "Small",
+                      "color": "Good"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "✅ Gathering Information",
+                      "size": "Small",
+                      "color": "Good"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "🔵 Investigation",
+                      "size": "Small",
+                      "weight": "Bolder",
+                      "color": "Accent"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "⚪ Resolution",
+                      "size": "Small"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "⚪ Verification",
+                      "size": "Small"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "auto",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "⚪ Closed",
+                      "size": "Small"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

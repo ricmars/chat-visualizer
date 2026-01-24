@@ -1,0 +1,143 @@
+{
+  "@context": "https://schema.google.com/a2ui",
+  "@type": "Document",
+  "version": "1.0",
+  "elements": [
+    {
+      "@type": "TextBlock",
+      "id": "user-text-1",
+      "content": "Can you help me analyze this data and create a visualization?",
+      "properties": {
+        "role": "user"
+      },
+      "style": {
+        "variant": "user-message",
+        "color": "primary"
+      }
+    },
+    {
+      "@type": "TextBlock",
+      "id": "intro",
+      "content": "I'll help you analyze the data. Let me start by processing it:",
+      "properties": {
+        "role": "assistant"
+      },
+      "style": {
+        "variant": "assistant-message"
+      }
+    },
+    {
+      "@type": "CodeBlock",
+      "id": "py1",
+      "content": "import pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load and process data\ndf = pd.read_csv('sales_data.csv')\nsummary = df.groupby('category').sum()\n\nprint(summary)",
+      "properties": {
+        "language": "python",
+        "filename": "data_analysis.py",
+        "lineNumbers": true,
+        "copyable": true
+      }
+    },
+    {
+      "@type": "OutputBlock",
+      "id": "py1-output",
+      "content": "Analysis complete. 3 categories processed with total revenue: $125,430",
+      "style": {
+        "variant": "success"
+      }
+    },
+    {
+      "@type": "Alert",
+      "id": "insight-1",
+      "content": [
+        {
+          "@type": "Heading",
+          "content": "Sales Performance Summary",
+          "style": { "size": "lg" }
+        },
+        {
+          "@type": "TextBlock",
+          "content": "Your top performing category increased by 23% compared to last quarter."
+        },
+        {
+          "@type": "MetricSet",
+          "content": [
+            { "@type": "Metric", "properties": { "label": "Total Revenue", "value": "$125,430" } },
+            { "@type": "Metric", "properties": { "label": "Growth Rate", "value": "23%" } },
+            { "@type": "Metric", "properties": { "label": "Top Category", "value": "Electronics" } }
+          ]
+        }
+      ],
+      "style": {
+        "variant": "positive"
+      }
+    },
+    {
+      "@type": "Image",
+      "id": "chart1",
+      "properties": {
+        "src": "/sales-chart-visualization.jpg",
+        "alt": "Sales performance chart showing category breakdown",
+        "responsive": true
+      }
+    },
+    {
+      "@type": "Caption",
+      "id": "chart1-caption",
+      "content": "Quarterly sales by category",
+      "style": {
+        "size": "sm",
+        "color": "muted"
+      }
+    },
+    {
+      "@type": "MarkdownBlock",
+      "id": "explanation",
+      "content": "## Analysis Results\n\nBased on the data analysis:\n\n- **Electronics** leads with 45% of total revenue\n- **Clothing** shows steady growth at 12% increase\n- **Home & Garden** remains stable with minor fluctuations\n\n### Recommendations\n\n1. Invest more in Electronics inventory\n2. Run promotional campaigns for Clothing\n3. Monitor Home & Garden trends closely",
+      "properties": {
+        "allowHtml": false,
+        "sanitize": true
+      }
+    },
+    {
+      "@type": "DataTable",
+      "id": "table-view",
+      "properties": {
+        "columns": [
+          { "key": "id", "label": "ID", "sortable": true },
+          { "key": "name", "label": "Name", "sortable": true },
+          { "key": "status", "label": "Status", "sortable": true },
+          { "key": "revenue", "label": "Revenue", "sortable": true }
+        ],
+        "rows": [
+          { "id": 1, "name": "Alice Johnson", "status": "Active", "revenue": 45230 },
+          { "id": 2, "name": "Bob Smith", "status": "Active", "revenue": 38920 },
+          { "id": 3, "name": "Carol Davis", "status": "Pending", "revenue": 12450 }
+        ],
+        "pagination": false,
+        "searchable": true
+      }
+    },
+    {
+      "@type": "ActionGroup",
+      "id": "actions",
+      "content": [
+        {
+          "@type": "Action",
+          "name": "downloadFile",
+          "label": "Export Report",
+          "parameters": { "filename": "sales_report.pdf", "url": "/api/export" }
+        },
+        {
+          "@type": "Action",
+          "name": "rerunQuery",
+          "label": "Rerun Analysis",
+          "parameters": { "analysisId": "analysis-001" }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "timestamp": "2024-01-01T00:00:00.000Z",
+    "source": "pega-chat-transform"
+  }
+}

@@ -1,7 +1,7 @@
 
 import { useEffect, useState, useMemo } from "react"
 import styled from "styled-components"
-import { AlertCircle, CheckCircle2, Code2, Eye, Edit2, ChevronRight, ChevronDown } from "lucide-react"
+import { Icon } from "@pega/cosmos-react-core"
 import Ajv from "ajv"
 import addFormats from "ajv-formats"
 import CodeMirror from "@uiw/react-codemirror"
@@ -12,12 +12,21 @@ import { defaultKeymap, history, historyKeymap } from "@codemirror/commands"
 import { keymap, lineNumbers, highlightActiveLineGutter } from "@codemirror/view"
 import { Extension } from "@codemirror/state"
 
+interface SampleConfig {
+  path: string
+  name: string
+}
+
 interface JsonEditorProps {
   value: string
-  onChange: (value: string) => void
+  onChange?: (value: string) => void
   schema?: any
   currentSample?: string
   onSampleLoad?: (sampleName: string) => void
+  readOnly?: boolean
+  title?: string
+  samples?: SampleConfig[]
+  outputFormat?: string
 }
 
 type ViewMode = "edit" | "view"
@@ -81,7 +90,7 @@ const ButtonGroup = styled.div`
   gap: 4px;
 `
 
-const Button = styled.button<{ active?: boolean; variant?: 'default' | 'outline' }>`
+const Button = styled.button<{ $active?: boolean; $variant?: 'default' | 'outline' }>`
   display: flex;
   align-items: center;
   gap: 4px;
@@ -89,14 +98,14 @@ const Button = styled.button<{ active?: boolean; variant?: 'default' | 'outline'
   padding: 0 8px;
   font-size: 12px;
   border-radius: 4px;
-  border: 1px solid ${props => props.variant === 'outline' ? '#e5e7eb' : 'transparent'};
-  background: ${props => props.active ? '#3F57E4' : props.variant === 'outline' ? '#fff' : 'transparent'};
-  color: ${props => props.active ? '#fff' : '#374151'};
+  border: 1px solid ${props => props.$variant === 'outline' ? '#e5e7eb' : 'transparent'};
+  background: ${props => props.$active ? '#3F57E4' : props.$variant === 'outline' ? '#fff' : 'transparent'};
+  color: ${props => props.$active ? '#fff' : '#374151'};
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: ${props => props.active ? '#3F57E4' : 'rgba(0, 0, 0, 0.05)'};
+    background: ${props => props.$active ? '#3F57E4' : 'rgba(0, 0, 0, 0.05)'};
   }
 
   &:disabled {
@@ -154,11 +163,11 @@ const PopoverContent = styled.div`
   z-index: 50;
 `
 
-const Alert = styled.div<{ variant?: 'destructive' }>`
+const Alert = styled.div<{ $variant?: 'destructive' }>`
   display: flex;
   gap: 8px;
   padding: 8px;
-  background: ${props => props.variant === 'destructive' ? '#fef2f2' : 'transparent'};
+  background: ${props => props.$variant === 'destructive' ? '#fef2f2' : 'transparent'};
   border-radius: 4px;
   margin-bottom: 8px;
 `
@@ -380,36 +389,42 @@ function removeEmptyEnumValues(obj: any, schema: any, rootSchema: any, path: str
     return obj
 }
 
-export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoad }: JsonEditorProps) {
+export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoad, readOnly = false, title, samples = [], outputFormat }: JsonEditorProps) {
   const [errors, setErrors] = useState<string[]>([])
   const [isValid, setIsValid] = useState(true)
-  const [viewMode, setViewMode] = useState<ViewMode>("edit")
+  const [viewMode, setViewMode] = useState<ViewMode>(readOnly ? "view" : "edit")
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(["root"]))
   const [showErrors, setShowErrors] = useState(false)
 
-  const loadSample = async (sampleName: string) => {
-    if (!sampleName) return
+  const loadSample = async (samplePath: string) => {
+    if (!samplePath) return
     
     try {
-      const response = await fetch(`/${sampleName}`)
+      const response = await fetch(`/${samplePath}`)
       if (!response.ok) {
-        throw new Error(`Failed to load ${sampleName}`)
+        throw new Error(`Failed to load ${samplePath}`)
       }
       const json = await response.json()
       const prettified = JSON.stringify(json, null, 2)
-      onChange(prettified)
+      if (!readOnly) {
+        onChange?.(prettified)
+      }
       if (onSampleLoad) {
-        onSampleLoad(sampleName)
+        onSampleLoad(samplePath)
       }
     } catch (error) {
-      console.error(`Error loading sample ${sampleName}:`, error)
+      console.error(`Error loading sample ${samplePath}:`, error)
     }
   }
 
   const handleSampleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const sampleName = e.target.value
-    if (sampleName && sampleName !== currentSample) {
-      loadSample(sampleName)
+    const samplePath = e.target.value
+    if (samplePath && samplePath !== currentSample) {
+      if (onSampleLoad) {
+        onSampleLoad(samplePath)
+      } else {
+        loadSample(samplePath)
+      }
     }
   }
 
@@ -478,10 +493,11 @@ export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoa
   }, [value, validator, schema])
 
   const handlePrettify = () => {
+    if (readOnly) return
     try {
       const parsed = JSON.parse(value)
       const prettified = JSON.stringify(parsed, null, 2)
-      onChange(prettified)
+      onChange?.(prettified)
     } catch {
       // Invalid JSON, can't prettify
     }
@@ -596,9 +612,9 @@ export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoa
         <JsonValue>
           <JsonToggle onClick={() => togglePath(path)}>
             {isExpanded ? (
-              <ChevronDown size={12} color="#6b7280" />
+              <Icon name="caret-down" size="s" />
             ) : (
-              <ChevronRight size={12} color="#6b7280" />
+              <Icon name="caret-right" size="s" />
             )}
             <JsonMuted>
               {type === "array" ? `[${val.length}]` : `{${Object.keys(val).length}}`}
@@ -657,85 +673,103 @@ export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoa
     }
   }
 
+  // Get display name for current format
+  const formatDisplayName = outputFormat === "pega" ? "Pega" : 
+    outputFormat === "adaptive-cards" ? "Adaptive Cards" :
+    outputFormat === "json-render" ? "Json-render" :
+    outputFormat === "google-a2ui" ? "Google A2UI" :
+    outputFormat || "JSON";
+
   return (
     <EditorContainer>
       <EditorHeader>
         <EditorTitle>
-          JSON Editor
-          <SampleSelect value={currentSample || "sample3.json"} onChange={handleSampleChange}>
-            <option value="sample1.json">Sample 1 - Data Analysis</option>
-            <option value="sample2.json">Sample 2 - JavaScript Example</option>
-            <option value="sample3.json">Sample 3 - Case Example</option>
-          </SampleSelect>
+          {title || "JSON Editor"} {outputFormat && outputFormat !== "pega" && `(${formatDisplayName})`}
+          {samples.length > 0 && (
+            <SampleSelect value={currentSample || samples[0]?.path} onChange={handleSampleChange}>
+              {samples.map((sample) => (
+                <option key={sample.path} value={sample.path}>
+                  {sample.name}
+                </option>
+              ))}
+            </SampleSelect>
+          )}
         </EditorTitle>
         <HeaderActions>
           <ButtonGroup>
             <Button
-              active={viewMode === "edit"}
+              $active={viewMode === "edit"}
               onClick={() => setViewMode("edit")}
+              title="View raw JSON"
             >
-              <Edit2 size={12} />
-              Edit
+              <Icon name="code" size="s" />
+              Raw
             </Button>
             <Button
-              active={viewMode === "view"}
+              $active={viewMode === "view"}
               onClick={() => setViewMode("view")}
+              title="View as tree structure"
             >
-              <Eye size={12} />
-              View
+              <Icon name="eye" size="s" />
+              Tree
             </Button>
           </ButtonGroup>
-          {viewMode === "edit" && (
+          {viewMode === "edit" && !readOnly && (
             <Button
-              variant="outline"
+              $variant="outline"
               onClick={handlePrettify}
+              title="Format JSON with proper indentation"
             >
-              <Code2 size={12} />
+              <Icon name="code" size="s" />
               Prettify
             </Button>
           )}
           {viewMode === "view" && (
             <ButtonGroup>
               <Button
-                variant="outline"
+                $variant="outline"
                 onClick={expandAll}
+                title="Expand all nodes"
               >
-                Expand All
+                <Icon name="plus" size="s" />
               </Button>
               <Button
-                variant="outline"
+                $variant="outline"
                 onClick={collapseAll}
+                title="Collapse all nodes"
               >
-                Collapse All
+                <Icon name="minus" size="s" />
               </Button>
             </ButtonGroup>
           )}
-          <StatusContainer>
-            {isValid ? (
-              <StatusValid>
-                <CheckCircle2 size={14} />
-                Valid
-              </StatusValid>
-            ) : (
-              <Popover>
-                <StatusError onClick={() => setShowErrors(!showErrors)}>
-                  <AlertCircle size={14} />
-                  {errors.length} Error{errors.length !== 1 ? "s" : ""}
-                </StatusError>
-                {showErrors && (
-                  <PopoverContent>
-                    <div style={{ marginBottom: '12px', fontWeight: 600, fontSize: '14px' }}>Validation Errors</div>
-                    {errors.map((error, i) => (
-                      <Alert key={i} variant="destructive">
-                        <AlertCircle size={16} color="#ef4444" />
-                        <AlertDescription color="#ef4444">{error}</AlertDescription>
-                      </Alert>
-                    ))}
-                  </PopoverContent>
-                )}
-              </Popover>
-            )}
-          </StatusContainer>
+          {schema && (
+            <StatusContainer>
+              {isValid ? (
+                <StatusValid>
+                  <Icon name="check" size="s" />
+                  Valid
+                </StatusValid>
+              ) : (
+                <Popover>
+                  <StatusError onClick={() => setShowErrors(!showErrors)}>
+                    <Icon name="warn" size="s" />
+                    {errors.length} Error{errors.length !== 1 ? "s" : ""}
+                  </StatusError>
+                  {showErrors && (
+                    <PopoverContent>
+                      <div style={{ marginBottom: '12px', fontWeight: 600, fontSize: '14px' }}>Validation Errors</div>
+                      {errors.map((error, i) => (
+                        <Alert key={i} $variant="destructive">
+                          <Icon name="warn" size="s" />
+                          <AlertDescription color="#ef4444">{error}</AlertDescription>
+                        </Alert>
+                      ))}
+                    </PopoverContent>
+                  )}
+                </Popover>
+              )}
+            </StatusContainer>
+          )}
         </HeaderActions>
       </EditorHeader>
 
@@ -743,11 +777,11 @@ export function JsonEditor({ value, onChange, schema, currentSample, onSampleLoa
         <EditorArea>
           <CodeMirror
             value={value}
-            onChange={onChange}
+            onChange={readOnly ? undefined : onChange}
             extensions={extensions}
             theme="light"
             basicSetup={false}
-            editable={true}
+            editable={!readOnly}
             style={{ height: "100%", minHeight: "100%" }}
           />
         </EditorArea>

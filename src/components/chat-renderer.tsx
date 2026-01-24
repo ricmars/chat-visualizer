@@ -51,30 +51,35 @@ const CaseMessageContainer = styled.div`
   padding: 0 24px;
 `
 
-const PartContainer = styled.div<{ isUser: boolean; hasCase?: boolean; $isSingleLine?: boolean }>`
+const PartContainer = styled.div<{ $isUser: boolean; $hasCase?: boolean; $isSingleLine?: boolean }>`
   display: flex;
   width: 100%;
-  justify-content: ${props => props.isUser ? 'flex-end' : 'flex-start'};
+  justify-content: ${props => props.$isUser ? 'flex-end' : 'flex-start'};
   align-items: ${props => props.$isSingleLine ? 'center' : 'flex-start'};
   gap: 0.5rem;
-  margin-bottom: ${props => props.hasCase ? '12px' : '0'};
+  margin-bottom: ${props => props.$hasCase ? '12px' : '0'};
   
   &:last-child {
     margin-bottom: 0;
   }
 `
 
-const PartContentWrapper = styled.div<{ isUser: boolean; hasCase?: boolean }>`
+const PartContentWrapper = styled.div<{ $isUser: boolean; $hasCase?: boolean }>`
   display: flex;
   flex-direction: column;
-  align-items: ${props => props.isUser ? 'flex-end' : 'flex-start'};
+  align-items: ${props => props.$isUser ? 'flex-end' : 'flex-start'};
   width: 100%;
 `
 
-export const StyledPolarisIcon = styled(Flex)(({ theme }) => {
+export const StyledPolarisIcon = styled(Flex).withConfig({
+  shouldForwardProp: (prop) => !['container', 'interactive'].includes(prop),
+})(({ theme }) => {
   return css`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
-    color: ${theme.base.palette.light};
+    color: ${theme?.base?.palette?.light || '#ffffff'};
     background: #681fc3;
     width: 32px;
     height: 32px;
@@ -99,9 +104,9 @@ const CaseCardContent = styled(CardContent)`
   gap: 12px;
 `
 
-const PartBase = styled.div<{ isUser: boolean; $hasCase?: boolean }>`
-  border-radius: ${props => props.isUser ? '20px 5px 20px 20px' : '0'};
-  ${props => props.isUser && `
+const PartBase = styled.div<{ $isUser: boolean; $hasCase?: boolean }>`
+  border-radius: ${props => props.$isUser ? '20px 5px 20px 20px' : '0'};
+  ${props => props.$isUser && `
     display: flex;
     padding: 6px 14px;
     flex-direction: column;
@@ -113,7 +118,7 @@ const PartBase = styled.div<{ isUser: boolean; $hasCase?: boolean }>`
 `
 
 const TextPart = styled(PartBase)<{ $hasActions?: boolean }>`
-  ${props => !props.isUser && !props.$hasCase && `
+  ${props => !props.$isUser && !props.$hasCase && `
     padding: 10px 16px;
   `}
 `
@@ -135,7 +140,7 @@ const MarkdownPart = styled.div<{ $hasCase?: boolean }>`
 `
 
 const RichTextPart = styled(PartBase)`
-  ${props => !props.isUser && `
+  ${props => !props.$isUser && `
     padding: 10px 16px;
   `}
 `
@@ -185,20 +190,14 @@ function MessageBubble({ message, onClick }: { message: ChatMessage; onClick?: (
             <>
               {!isPartUser && (
                 <StyledPolarisIcon
-                  container={{
-                    inline: true,
-                    alignItems: "center",
-                    justify: "center",
-                  }}
                   style={{
                     alignSelf: isSingleLine ? 'center' : 'flex-start',
-                    marginTop: isSingleLine ? '0' : '0'
                   }}
                 >
                   <Icon name="polaris-solid" size="m" />
                 </StyledPolarisIcon>
               )}
-              <PartContentWrapper isUser={isPartUser} hasCase={hasCase}>
+              <PartContentWrapper $isUser={isPartUser} $hasCase={hasCase}>
                 <PartRenderer part={part} message={message} />
               </PartContentWrapper>
             </>
@@ -289,8 +288,8 @@ function PartContainerWithAlignment({
   return (
     <PartContainer 
       ref={contentRef}
-      isUser={isUser} 
-      hasCase={hasCase} 
+      $isUser={isUser} 
+      $hasCase={hasCase} 
       $isSingleLine={isSingleLine}
     >
       {children({ isSingleLine })}
@@ -315,7 +314,7 @@ function PartRenderer({ part, message }: { part: MessagePart; message: ChatMessa
     switch (part.type) {
       case "text":
         return (
-          <TextPart isUser={isUser} $hasCase={hasCase} $hasActions={hasActions}>
+          <TextPart $isUser={isUser} $hasCase={hasCase} $hasActions={hasActions}>
             <TextContent>{part.content}</TextContent>
           </TextPart>
         )
@@ -330,7 +329,7 @@ function PartRenderer({ part, message }: { part: MessagePart; message: ChatMessa
       case "richText":
         return (
           <RichTextPart 
-            isUser={isUser}
+            $isUser={isUser}
             dangerouslySetInnerHTML={{ __html: part.content }} 
           />
         )

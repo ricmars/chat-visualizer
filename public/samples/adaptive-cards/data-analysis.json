@@ -1,0 +1,338 @@
+{
+  "id": "example-conversation-1-adaptive",
+  "title": "Data Analysis Example (Adaptive Cards)",
+  "platform": "adaptive-cards",
+  "cards": [
+    {
+      "type": "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.5",
+      "body": [
+        {
+          "type": "TextBlock",
+          "text": "Can you help me analyze this data and create a visualization?",
+          "wrap": true,
+          "color": "Accent"
+        }
+      ]
+    },
+    {
+      "type": "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.5",
+      "body": [
+        {
+          "type": "TextBlock",
+          "text": "I'll help you analyze the data. Let me start by processing it:",
+          "wrap": true
+        },
+        {
+          "type": "TextBlock",
+          "text": "📄 data_analysis.py",
+          "weight": "Bolder",
+          "size": "Small",
+          "spacing": "None"
+        },
+        {
+          "type": "CodeBlock",
+          "codeSnippet": "import pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load and process data\ndf = pd.read_csv('sales_data.csv')\nsummary = df.groupby('category').sum()\n\nprint(summary)",
+          "language": "python"
+        },
+        {
+          "type": "TextBlock",
+          "text": "Output: Analysis complete. 3 categories processed with total revenue: $125,430",
+          "wrap": true,
+          "color": "Good",
+          "isSubtle": true,
+          "size": "Small"
+        },
+        {
+          "type": "TextBlock",
+          "text": "✅ Status: success",
+          "size": "Small",
+          "isSubtle": true
+        },
+        {
+          "type": "Container",
+          "style": "good",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Sales Performance Summary",
+              "weight": "Bolder",
+              "size": "Medium"
+            },
+            {
+              "type": "TextBlock",
+              "text": "Your top performing category increased by 23% compared to last quarter.",
+              "wrap": true
+            },
+            {
+              "type": "FactSet",
+              "facts": [
+                {
+                  "title": "Total Revenue",
+                  "value": "$125,430"
+                },
+                {
+                  "title": "Growth Rate",
+                  "value": "23%"
+                },
+                {
+                  "title": "Top Category",
+                  "value": "Electronics"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Image",
+          "url": "/sales-chart-visualization.jpg",
+          "altText": "Sales performance chart showing category breakdown",
+          "size": "Large",
+          "horizontalAlignment": "Center"
+        },
+        {
+          "type": "TextBlock",
+          "text": "Quarterly sales by category",
+          "wrap": true,
+          "isSubtle": true,
+          "size": "Small"
+        },
+        {
+          "type": "TextBlock",
+          "text": "## Analysis Results\n\nBased on the data analysis:\n\n- **Electronics** leads with 45% of total revenue\n- **Clothing** shows steady growth at 12% increase\n- **Home & Garden** remains stable with minor fluctuations\n\n### Recommendations\n\n1. Invest more in Electronics inventory\n2. Run promotional campaigns for Clothing\n3. Monitor Home & Garden trends closely",
+          "wrap": true
+        },
+        {
+          "type": "Container",
+          "items": [
+            {
+              "type": "ColumnSet",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "id",
+                      "weight": "Bolder"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "name",
+                      "weight": "Bolder"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "status",
+                      "weight": "Bolder"
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "revenue",
+                      "weight": "Bolder"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "ColumnSet",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "1",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Alice Johnson",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Active",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "45230",
+                      "wrap": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "ColumnSet",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "2",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Bob Smith",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Active",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "38920",
+                      "wrap": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "ColumnSet",
+              "columns": [
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "3",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Carol Davis",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Pending",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Column",
+                  "width": "stretch",
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "12450",
+                      "wrap": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "TextBlock",
+          "text": "Select one of the 2 options",
+          "wrap": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "Action.Submit",
+          "title": "Export Report",
+          "data": {
+            "actionId": "export-data",
+            "verb": "downloadFile",
+            "filename": "sales_report.pdf",
+            "url": "/api/export"
+          }
+        },
+        {
+          "type": "Action.Submit",
+          "title": "Rerun Analysis",
+          "data": {
+            "actionId": "rerun",
+            "verb": "rerunQuery",
+            "analysisId": "analysis-001"
+          }
+        }
+      ]
+    }
+  ]
+}

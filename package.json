@@ -12,6 +12,8 @@
     "gen-schema": "./node_modules/.bin/ts-json-schema-generator --no-type-check --type 'Conversation' --path 'src/lib/types.ts' -o 'src/lib/schemas/chat-message.schema.json'"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.978.0",
+    "@aws-sdk/credential-providers": "^3.978.0",
     "@codemirror/lang-json": "^6.0.2",
     "@codemirror/theme-one-dark": "^6.1.3",
     "@json-render/core": "^0.3.0",

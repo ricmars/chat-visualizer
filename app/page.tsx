@@ -267,11 +267,25 @@ export default function Page() {
   const [selectedModel, setSelectedModel] = useState("gpt-4o");
   const [ttsEnabled, setTtsEnabled] = useState(false);
 
-  // Available models
+  // All available models (provider is auto-detected)
   const availableModels = [
     { id: "gpt-4o", name: "GPT-4o" },
     { id: "gpt-4o-mini", name: "GPT-4o Mini" },
+    { id: "gpt-4-turbo", name: "GPT-4 Turbo" },
+    { id: "us.anthropic.claude-sonnet-4-5-20250929-v1:0", name: "Claude Sonnet 4.5 (via Bedrock)" },
+    { id: "us.anthropic.claude-sonnet-4-20250514-v1:0", name: "Claude Sonnet 4.0 (via Bedrock)" },
+    { id: "us.anthropic.claude-haiku-4-5-20251001-v1:0", name: "Claude Haiku 4.5 (via Bedrock)" },
+    { id: "us.anthropic.claude-opus-4-5-20251101-v1:0", name: "Claude Opus 4.5 (via Bedrock)" },
+    { id: "us.anthropic.claude-opus-4-1-20250805-v1:0", name: "Claude Opus 4.1 (via Bedrock)" }
   ];
+
+  // Function to determine provider from model ID
+  const getProviderFromModel = (modelId: string): "openai" | "bedrock" => {
+    if (modelId.startsWith("gpt-")) {
+      return "openai";
+    }
+    return "bedrock";
+  };
   
   // Simulation output format
   const [simulationOutputFormat, setSimulationOutputFormat] = useState<PlatformType>("pega");
@@ -462,7 +476,11 @@ export default function Page() {
     setStreamingText("");
 
     try {
-      const response = await fetch("/api/openai", {
+      // Select API endpoint based on model (auto-detect provider)
+      const provider = getProviderFromModel(selectedModel);
+      const apiEndpoint = provider === "openai" ? "/api/openai" : "/api/bedrock";
+      
+      const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

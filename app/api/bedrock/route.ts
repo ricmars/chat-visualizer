@@ -9,7 +9,6 @@ import {
   getSystemPromptForPlatform,
 } from "../../../src/lib/schemas/ai-output.schema";
 import {
-  transformMessage,
   type PlatformType,
 } from "../../../src/lib/transformers";
 import type { ChatMessage } from "../../../src/lib/types";
@@ -266,7 +265,7 @@ async function handleStructuredOutputMode(
           } else if (parsed.type === "message_stop") {
             console.log("Message generation completed");
           }
-        } catch (parseError) {
+        } catch {
           console.error("Failed to parse chunk:", chunkText);
         }
       }
